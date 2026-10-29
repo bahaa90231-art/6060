@@ -1,62 +1,1510 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="الموقع الرسمي لرواية الأماكن 3:13 — نبذة عن الرواية، الفصول، القراءة والتحميل.">
-<meta name="robots" content="index,follow">
-<meta property="og:title" content="الأماكن 3:13 — الرواية">
-<meta property="og:description" content="اقرأ رواية الأماكن 3:13 وتعرّف على فصولها.">
-<link rel="canonical" href="https://example.com/">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="style.css">
-<title>الأماكن 3:13 | الرواية</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>عدسة الروايات - LENS OF NOVELS</title>
+    <meta name="description" content="عدسة الروايات - عالم الإبداع القصصي والإنتاج السينمائي." />
+    <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0A0A0A; --bg-secondary: #111111; --bg-card: #161616; --bg-hover: #1F1F1F;
+            --gold: #F5B400; --gold-light: #FFC933; --gold-dark: #D49400;
+            --gold-glow: rgba(245, 180, 0, 0.15);
+            --text: #FFFFFF; --text-secondary: #B8B8B8; --text-muted: #7A7A7A;
+            --border: rgba(245, 180, 0, 0.12); --border-hover: rgba(245, 180, 0, 0.3);
+            --radius-sm: 8px; --radius: 12px; --radius-lg: 20px;
+            --shadow: 0 8px 24px rgba(0,0,0,0.5); --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
+            --shadow-gold: 0 8px 24px rgba(245,180,0,0.25);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg); color: var(--text); min-height: 100vh;
+            overflow-x: hidden; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+
+        /* HEADER */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .header-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; padding: 14px 0; min-height: 70px;
+        }
+        .menu-btn {
+            width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none; color: var(--text); cursor: pointer;
+            font-size: 22px; transition: all var(--transition); border-radius: var(--radius-sm);
+            flex-shrink: 0;
+        }
+        .menu-btn:active { background: var(--bg-hover); }
+        .header-brand {
+            display: flex; align-items: center; gap: 12px; text-decoration: none;
+            color: var(--text); flex: 1; justify-content: center; cursor: pointer;
+        }
+        .header-brand .logo {
+            width: 46px; height: 46px; border-radius: 50%; overflow: hidden;
+            background: var(--bg-card); border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px var(--gold-glow); flex-shrink: 0; position: relative;
+        }
+        .header-brand .logo img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center 35%;
+        }
+        .header-brand .brand-text { display: flex; flex-direction: column; line-height: 1.15; text-align: center; }
+        .header-brand .brand-text .name { font-weight: 800; font-size: 17px; color: var(--gold); letter-spacing: -0.01em; }
+        .header-brand .brand-text .tag { font-size: 9px; color: var(--text-muted); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; }
+        .header-spacer { width: 42px; flex-shrink: 0; }
+
+        /* SIDEBAR */
+        .sidebar-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            z-index: 998; opacity: 0; visibility: hidden; transition: all var(--transition);
+        }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        .sidebar {
+            position: fixed; top: 0; right: -320px; width: 300px; max-width: 85vw;
+            height: 100vh; background: var(--bg-secondary); border-left: 1px solid var(--border);
+            z-index: 999; transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto; display: flex; flex-direction: column;
+        }
+        .sidebar.active { right: 0; box-shadow: -20px 0 60px rgba(0,0,0,0.7); }
+        .sidebar-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px; border-bottom: 1px solid var(--border);
+        }
+        .sidebar-header .logo-mini { display: flex; align-items: center; gap: 10px; }
+        .sidebar-header .logo-mini .icon {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card);
+            border: 2px solid var(--gold); overflow: hidden; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sidebar-header .logo-mini .icon img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center 35%;
+        }
+        .sidebar-header .logo-mini .text { display: flex; flex-direction: column; }
+        .sidebar-header .logo-mini .text .name { font-size: 15px; font-weight: 800; color: var(--gold); }
+        .sidebar-header .logo-mini .text .sub { font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
+        .sidebar-close {
+            width: 36px; height: 36px; background: transparent; border: 1px solid var(--border);
+            border-radius: 50%; color: var(--text-secondary); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition); font-size: 14px;
+        }
+        .sidebar-close:hover { background: var(--bg-hover); color: var(--gold); border-color: var(--border-hover); }
+        .sidebar-nav { padding: 16px 0; flex: 1; }
+        .sidebar-nav a {
+            display: flex; align-items: center; gap: 14px; padding: 14px 24px;
+            color: var(--text-secondary); text-decoration: none; font-size: 15px;
+            font-weight: 600; transition: all var(--transition);
+            border-right: 3px solid transparent; cursor: pointer;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            color: var(--gold); background: var(--bg-hover); border-right-color: var(--gold);
+        }
+        .sidebar-nav a i { width: 22px; font-size: 17px; text-align: center; color: var(--text-muted); transition: color var(--transition); }
+        .sidebar-nav a:hover i, .sidebar-nav a.active i { color: var(--gold); }
+        .sidebar-footer {
+            padding: 20px 24px; border-top: 1px solid var(--border);
+            font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.7;
+        }
+        .sidebar-footer .dev { color: var(--gold); font-weight: 700; }
+
+        /* PAGE SYSTEM */
+        .page { display: none; animation: pageFadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HERO */
+        .hero { padding: 60px 0 40px; text-align: center; position: relative; overflow: hidden; }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 0%, var(--gold-glow), transparent 60%),
+                        radial-gradient(circle at 20% 100%, rgba(245,180,0,0.05), transparent 50%);
+            pointer-events: none; z-index: -1;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px;
+            background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.25);
+            border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--gold);
+            margin-bottom: 24px; letter-spacing: 0.5px;
+        }
+        .hero h1 {
+            font-size: clamp(28px, 7vw, 68px); font-weight: 900; line-height: 1.15;
+            letter-spacing: -0.02em; margin-bottom: 8px; color: var(--text);
+        }
+        .hero h1 .gold {
+            color: var(--gold); display: block; margin-top: 4px;
+            background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(13px, 1.5vw, 16px); color: var(--text-secondary);
+            max-width: 680px; margin: 20px auto 32px; line-height: 1.9; padding: 0 12px;
+        }
+        .hero-buttons { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto; padding: 0 16px; }
+        .btn-primary {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 16px 28px; background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #0A0A0A; border: none; border-radius: 100px; font-family: inherit;
+            font-size: 15px; font-weight: 800; cursor: pointer; transition: all var(--transition);
+            text-decoration: none; box-shadow: var(--shadow-gold); letter-spacing: 0.02em;
+        }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-secondary {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 16px 28px; background: transparent; color: var(--text);
+            border: 1.5px solid var(--border-hover); border-radius: 100px;
+            font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+            transition: all var(--transition); text-decoration: none;
+        }
+        .btn-secondary:active { background: var(--bg-hover); border-color: var(--gold); color: var(--gold); }
+        .btn-secondary i { color: var(--gold); font-size: 16px; }
+
+        /* PAGE HEADER */
+        .page-header {
+            padding: 50px 0 30px; text-align: center; position: relative;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-header::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 0%, var(--gold-glow), transparent 70%);
+            pointer-events: none; z-index: -1;
+        }
+        .page-header .page-icon {
+            width: 68px; height: 68px; margin: 0 auto 18px;
+            background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.25);
+            border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-size: 28px;
+        }
+        .page-header h1 { font-size: clamp(24px, 5vw, 40px); font-weight: 900; color: var(--text); margin-bottom: 10px; }
+        .page-header p { font-size: 14px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; padding: 0 16px; }
+
+        /* SECTIONS */
+        .section { padding: 60px 0 40px; }
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+        }
+        .section-header .title-group { display: flex; align-items: center; gap: 12px; }
+        .section-header .title-icon {
+            width: 42px; height: 42px; background: rgba(245,180,0,0.08);
+            border: 1px solid rgba(245,180,0,0.2); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-size: 18px; flex-shrink: 0;
+        }
+        .section-header h2 { font-size: clamp(20px, 3vw, 28px); font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+        .section-header .view-all {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 700;
+            padding: 8px 16px; border-radius: 100px; border: 1px solid rgba(245,180,0,0.25);
+            background: rgba(245,180,0,0.05); transition: all var(--transition); cursor: pointer;
+        }
+        .section-header .view-all:hover { background: rgba(245,180,0,0.1); border-color: var(--gold); }
+
+        /* NOVELS GRID */
+        .novels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .novel-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); overflow: hidden; cursor: pointer;
+            transition: all var(--transition); text-decoration: none; color: inherit;
+            display: flex; flex-direction: column;
+        }
+        .novel-card:active { transform: scale(0.98); border-color: var(--border-hover); }
+        .novel-card .cover {
+            position: relative; width: 100%; aspect-ratio: 3 / 2; overflow: hidden;
+            background: var(--bg-secondary); border-bottom: 1px solid var(--border);
+        }
+        .novel-card .cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .novel-card .cover::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+        .novel-card .cover .category-tag {
+            position: absolute; top: 10px; right: 10px; padding: 4px 12px;
+            background: rgba(245,180,0,0.9); color: #0A0A0A; border-radius: 100px;
+            font-size: 10px; font-weight: 800; z-index: 2; letter-spacing: 0.02em;
+        }
+        .novel-card .cover .cover-placeholder {
+            width: 100%; height: 100%; display: flex; align-items: center;
+            justify-content: center; color: var(--gold); font-size: 40px; opacity: 0.3;
+        }
+        .novel-card .body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .novel-card .body h3 {
+            font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .novel-card .body .meta {
+            display: flex; gap: 10px; font-size: 11px; color: var(--text-muted);
+            font-weight: 600; flex-wrap: wrap;
+        }
+        .novel-card .body .meta span { display: flex; align-items: center; gap: 4px; }
+        .novel-card .body .meta i { color: var(--gold); font-size: 10px; }
+
+        /* EPISODES GRID */
+        .episodes-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .episode-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition);
+            cursor: pointer; display: flex; flex-direction: column;
+        }
+        .episode-card:active { transform: scale(0.98); border-color: var(--border-hover); }
+        .episode-card .thumb {
+            position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .episode-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .episode-card .thumb .thumb-placeholder {
+            width: 100%; height: 100%; display: flex; align-items: center;
+            justify-content: center; color: var(--gold); font-size: 48px; opacity: 0.3;
+        }
+        .episode-card .thumb::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none; z-index: 1;
+        }
+        .episode-card .thumb .play-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 68px; height: 68px; border-radius: 50%;
+            background: rgba(245,180,0,0.95); color: #0A0A0A;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; z-index: 2; transition: all var(--transition);
+            box-shadow: 0 0 30px rgba(245,180,0,0.5), 0 0 0 8px rgba(245,180,0,0.15);
+            padding-left: 5px;
+        }
+        .episode-card:active .play-btn { transform: translate(-50%, -50%) scale(0.9); }
+        .episode-card .thumb .duration {
+            position: absolute; bottom: 10px; left: 10px;
+            background: rgba(0,0,0,0.85); color: #fff; padding: 4px 10px;
+            border-radius: 6px; font-size: 11px; font-weight: 700;
+            z-index: 2; direction: ltr;
+        }
+        .episode-card .thumb .category-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(245,180,0,0.9); color: #0A0A0A; padding: 4px 12px;
+            border-radius: 100px; font-size: 10px; font-weight: 800; z-index: 2;
+        }
+        .episode-card .body { padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+        .episode-card .body .episode-num {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 800; color: var(--gold);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .episode-card .body .episode-num i { font-size: 10px; }
+        .episode-card .body h3 {
+            font-size: 16px; font-weight: 800; color: var(--text); line-height: 1.35;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .episode-card .body .description {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .episode-card .body .meta {
+            display: flex; gap: 14px; font-size: 11px; color: var(--text-muted);
+            font-weight: 600; flex-wrap: wrap; margin-top: 4px;
+            padding-top: 10px; border-top: 1px solid var(--border);
+        }
+        .episode-card .body .meta span { display: flex; align-items: center; gap: 5px; }
+        .episode-card .body .meta i { color: var(--gold); font-size: 10px; }
+
+        /* ANNOUNCEMENTS */
+        .announcements-list { display: flex; flex-direction: column; gap: 16px; }
+        .announcement-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-right: 3px solid var(--gold); border-radius: var(--radius);
+            padding: 20px; transition: all var(--transition);
+        }
+        .announcement-card:hover { background: var(--bg-hover); border-color: var(--border-hover); border-right-color: var(--gold); }
+        .announcement-card .ann-head {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; flex-wrap: wrap;
+        }
+        .announcement-card .ann-head .ann-badge {
+            background: rgba(245,180,0,0.1); color: var(--gold);
+            padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 800;
+        }
+        .announcement-card .ann-head .ann-date { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+        .announcement-card h3 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+        .announcement-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+        /* ABOUT */
+        .about-content { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+        .about-block {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 28px; margin-bottom: 20px;
+        }
+        .about-block h2 {
+            font-size: 20px; font-weight: 800; color: var(--gold); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .about-block p { font-size: 14px; color: var(--text-secondary); line-height: 1.9; }
+        .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+        .team-member {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px; text-align: center;
+            transition: all var(--transition);
+        }
+        .team-member:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+        .team-member .avatar {
+            width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 50%;
+            background: rgba(245,180,0,0.1); border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-size: 24px;
+        }
+        .team-member .m-name { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+        .team-member .m-role { font-size: 11px; color: var(--gold); font-weight: 700; }
+
+        /* CONTACT */
+        .contact-content { max-width: 700px; margin: 0 auto; padding: 0 16px; }
+        .contact-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
+        .contact-item {
+            display: flex; align-items: center; gap: 16px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px;
+            transition: all var(--transition); text-decoration: none; color: inherit;
+        }
+        .contact-item:hover { border-color: var(--border-hover); background: var(--bg-hover); }
+        .contact-item .c-icon {
+            width: 52px; height: 52px; border-radius: 14px;
+            background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.2);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-size: 20px; flex-shrink: 0;
+        }
+        .contact-item .c-info { flex: 1; }
+        .contact-item .c-info .c-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+        .contact-item .c-info .c-value { font-size: 15px; color: var(--text); font-weight: 700; }
+        .contact-item .c-info .c-value.ltr { direction: ltr; text-align: right; }
+
+        .contact-form {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 28px;
+        }
+        .contact-form h3 {
+            font-size: 18px; font-weight: 800; color: var(--text);
+            margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+        }
+        .contact-form h3 i { color: var(--gold); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px 16px; background: var(--bg-secondary);
+            border: 1px solid var(--border); border-radius: var(--radius);
+            color: var(--text); font-family: inherit; font-size: 14px;
+            transition: all var(--transition);
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--gold); background: var(--bg-hover);
+        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .form-submit {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #0A0A0A; border: none; border-radius: 100px;
+            font-family: inherit; font-size: 15px; font-weight: 800;
+            cursor: pointer; transition: all var(--transition);
+            box-shadow: var(--shadow-gold); display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .form-submit:active { transform: scale(0.98); }
+
+        /* NOVEL DETAILS */
+        .novel-details { max-width: 900px; margin: 0 auto; padding: 40px 16px; }
+        .novel-hero { display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px; }
+        .novel-hero .nh-cover {
+            width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 3 / 4;
+            border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg); background: var(--bg-secondary);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .novel-hero .nh-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .novel-hero .nh-cover .cover-placeholder { color: var(--gold); font-size: 60px; opacity: 0.3; }
+        .novel-hero .nh-info { flex: 1; text-align: center; }
+        .novel-hero .nh-info .nh-category {
+            display: inline-block; background: rgba(245,180,0,0.1); color: var(--gold);
+            padding: 4px 14px; border-radius: 100px; font-size: 11px;
+            font-weight: 800; margin-bottom: 12px;
+        }
+        .novel-hero .nh-info h1 {
+            font-size: clamp(24px, 5vw, 36px); font-weight: 900; color: var(--text);
+            margin-bottom: 16px;
+        }
+        .novel-hero .nh-info .nh-desc {
+            font-size: 14px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 20px;
+        }
+        .novel-hero .nh-info .nh-stats {
+            display: flex; justify-content: center; gap: 24px;
+            flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .novel-hero .nh-info .nh-stats .stat {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .novel-hero .nh-info .nh-stats .stat .num { font-size: 22px; font-weight: 900; color: var(--gold); }
+        .novel-hero .nh-info .nh-stats .stat .lbl { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+
+        /* READER */
+        .reader-wrap { max-width: 820px; margin: 0 auto; padding: 30px 16px 80px; }
+        .reader-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+        }
+        .reader-back {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 100px; color: var(--text-secondary); font-family: inherit;
+            font-size: 13px; font-weight: 700; cursor: pointer; transition: all var(--transition);
+        }
+        .reader-back:hover { border-color: var(--gold); color: var(--gold); }
+        .reader-header {
+            text-align: center; margin-bottom: 32px;
+            padding-bottom: 24px; border-bottom: 1px solid var(--border);
+        }
+        .reader-header .r-category {
+            display: inline-block; background: rgba(245,180,0,0.1); color: var(--gold);
+            padding: 4px 14px; border-radius: 100px; font-size: 11px;
+            font-weight: 800; margin-bottom: 12px;
+        }
+        .reader-header h1 {
+            font-size: clamp(22px, 4vw, 34px); font-weight: 900;
+            color: var(--text); line-height: 1.3; margin-bottom: 10px;
+        }
+        .reader-header .r-desc {
+            font-size: 13px; color: var(--text-muted); line-height: 1.7;
+            max-width: 600px; margin: 0 auto;
+        }
+        .reader-content {
+            font-size: 17px; line-height: 2.1; color: #d8d8d8;
+            text-align: justify; white-space: pre-wrap; word-wrap: break-word;
+            padding: 8px 4px 30px;
+        }
+        .reader-footer-nav {
+            display: flex; justify-content: center; gap: 12px;
+            margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border);
+        }
+        .reader-footer-nav button {
+            padding: 14px 28px; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius); color: var(--text-secondary); font-family: inherit;
+            font-size: 13px; font-weight: 700; cursor: pointer; transition: all var(--transition);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .reader-footer-nav button:hover { border-color: var(--gold); color: var(--gold); background: var(--bg-hover); }
+        .reader-footer-nav button i { color: var(--gold); }
+
+        /* VIDEO MODAL */
+        .video-modal {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); align-items: center;
+            justify-content: center; padding: 20px;
+        }
+        .video-modal.active { display: flex; animation: modalFadeIn 0.3s ease; }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .video-modal-inner {
+            width: 100%; max-width: 1100px; background: var(--bg-secondary);
+            border: 1px solid var(--border); border-radius: var(--radius-lg);
+            overflow: hidden; box-shadow: var(--shadow-lg);
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; max-height: 95vh;
+        }
+        @keyframes modalSlideIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .video-modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.3); flex-shrink: 0;
+        }
+        .video-modal-header .title-info {
+            display: flex; flex-direction: column; gap: 4px;
+            flex: 1; min-width: 0;
+        }
+        .video-modal-header .episode-label {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; background: rgba(245,180,0,0.1);
+            color: var(--gold); border-radius: 6px; font-size: 10px;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            align-self: flex-start;
+        }
+        .video-modal-header .title {
+            font-size: 15px; font-weight: 800; color: var(--text);
+            line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .video-modal-close {
+            width: 38px; height: 38px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border); border-radius: 50%;
+            color: var(--text-secondary); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition); font-size: 16px; flex-shrink: 0;
+        }
+        .video-modal-close:hover { background: var(--gold); border-color: var(--gold); color: #0A0A0A; transform: rotate(90deg); }
+        .video-modal-body {
+            position: relative; width: 100%; background: #000;
+            flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .video-modal-body .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; }
+        .video-modal-body iframe, .video-modal-body video {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: none; display: block;
+        }
+        .video-modal-description {
+            padding: 16px 20px; border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.3); flex-shrink: 0;
+        }
+        .video-modal-description p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+        /* TEAM POSTER */
+        .team-poster-section { padding: 40px 0 20px; }
+        .team-poster {
+            width: 100%; max-width: 700px; margin: 0 auto;
+            border-radius: var(--radius-lg); overflow: hidden;
+            border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+        .team-poster img { width: 100%; height: auto; display: block; }
+        .team-poster::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 70%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+        }
+
+        /* EMPTY */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 48px; color: var(--gold); opacity: 0.4; margin-bottom: 16px; }
+        .empty-state p { font-size: 14px; }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 60px; padding: 40px 0 24px;
+            background: var(--bg-secondary); border-top: 1px solid var(--border);
+        }
+        .footer-brand { text-align: center; margin-bottom: 24px; }
+        .footer-brand .logo {
+            width: 70px; height: 70px; margin: 0 auto 14px;
+            border-radius: 50%; background: var(--bg-card);
+            border: 3px solid var(--gold); box-shadow: 0 0 30px var(--gold-glow);
+            overflow: hidden; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .footer-brand .logo img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+        .footer-brand .name { font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 4px; }
+        .footer-brand .sub { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; }
+        .footer-links {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 8px 20px; margin-bottom: 24px; padding: 0 16px;
+        }
+        .footer-links a {
+            color: var(--text-secondary); text-decoration: none; font-size: 13px;
+            font-weight: 600; padding: 6px 4px; transition: color var(--transition); cursor: pointer;
+        }
+        .footer-links a:hover { color: var(--gold); }
+        .footer-bottom {
+            padding-top: 20px; border-top: 1px solid var(--border);
+            display: flex; flex-direction: column; align-items: center;
+            gap: 8px; text-align: center; font-size: 11px; color: var(--text-muted);
+        }
+        .footer-bottom .author { color: var(--gold); font-weight: 700; }
+        .footer-bottom .dev { color: var(--text-secondary); font-weight: 600; }
+        .footer-bottom .phone { direction: ltr; color: var(--gold); font-weight: 700; }
+
+        /* RESPONSIVE */
+        @media (min-width: 600px) {
+            .container { padding: 0 28px; }
+            .hero { padding: 80px 0 60px; }
+            .hero-buttons { flex-direction: row; max-width: 560px; gap: 16px; }
+            .btn-primary, .btn-secondary { flex: 1; padding: 16px 24px; }
+            .novels-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+            .novel-card .body h3 { font-size: 16px; }
+            .episodes-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .episode-card .body { padding: 20px; }
+            .episode-card .body h3 { font-size: 17px; }
+            .footer-bottom {
+                flex-direction: row; justify-content: space-between;
+                text-align: right; padding: 20px 0 0;
+            }
+            .contact-grid { grid-template-columns: repeat(2, 1fr); }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 900px) {
+            .header-inner { padding: 16px 0; }
+            .menu-btn, .header-spacer { width: 46px; height: 46px; }
+            .header-brand .logo { width: 50px; height: 50px; }
+            .header-brand .brand-text .name { font-size: 19px; }
+            .header-brand .brand-text .tag { font-size: 10px; }
+            .hero { padding: 100px 0 80px; }
+            .section { padding: 80px 0 60px; }
+            .novels-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+            .novel-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
+            .novel-card:hover .cover img { transform: scale(1.05); }
+            .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
+            .episodes-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+            .episode-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
+            .episode-card:hover .thumb img { transform: scale(1.05); }
+            .episode-card:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); }
+            .novel-hero { flex-direction: row; align-items: flex-start; }
+            .novel-hero .nh-cover { margin: 0; }
+            .novel-hero .nh-info { text-align: right; }
+            .novel-hero .nh-info .nh-stats { justify-content: flex-start; }
+            .reader-content { font-size: 18px; }
+        }
+        @media (min-width: 1200px) { .hero { padding: 120px 0 100px; } }
+        @media (max-width: 479px) {
+            .container { padding: 0 16px; }
+            .header-inner { padding: 10px 0; min-height: 62px; gap: 10px; }
+            .menu-btn, .header-spacer { width: 38px; height: 38px; }
+            .header-brand .logo { width: 40px; height: 40px; }
+            .header-brand .brand-text .name { font-size: 15px; }
+            .header-brand .brand-text .tag { font-size: 8px; letter-spacing: 2px; }
+            .hero { padding: 40px 0 30px; }
+            .hero-badge { font-size: 11px; padding: 6px 14px; margin-bottom: 18px; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 13px; margin: 16px auto 24px; }
+            .hero-buttons { gap: 10px; }
+            .btn-primary, .btn-secondary { padding: 14px 22px; font-size: 14px; }
+            .section { padding: 40px 0 30px; }
+            .section-header { margin-bottom: 20px; gap: 10px; }
+            .section-header .title-icon { width: 36px; height: 36px; font-size: 15px; }
+            .section-header h2 { font-size: 20px; }
+            .section-header .view-all { font-size: 12px; padding: 6px 12px; }
+            .novels-grid { gap: 12px; }
+            .novel-card .body { padding: 12px 10px; gap: 6px; }
+            .novel-card .body h3 { font-size: 13px; }
+            .novel-card .body .meta { font-size: 10px; gap: 8px; }
+            .novel-card .cover .category-tag { font-size: 9px; padding: 3px 10px; top: 8px; right: 8px; }
+            .episodes-grid { gap: 16px; }
+            .episode-card .body { padding: 14px; gap: 8px; }
+            .episode-card .body h3 { font-size: 14px; }
+            .episode-card .body .description { font-size: 12px; }
+            .episode-card .thumb .play-btn { width: 56px; height: 56px; font-size: 20px; }
+            .video-modal { padding: 10px; }
+            .video-modal-header { padding: 10px 14px; }
+            .video-modal-header .title { font-size: 13px; }
+            .video-modal-close { width: 34px; height: 34px; font-size: 14px; }
+            .video-modal-description { padding: 12px 14px; }
+            .video-modal-description p { font-size: 12px; }
+            .footer { margin-top: 40px; padding: 30px 0 20px; }
+            .footer-brand .logo { width: 60px; height: 60px; }
+            .footer-brand .name { font-size: 16px; }
+            .footer-links { gap: 6px 16px; margin-bottom: 18px; }
+            .footer-links a { font-size: 12px; }
+            .page-header { padding: 36px 0 24px; }
+            .page-header .page-icon { width: 56px; height: 56px; font-size: 22px; margin-bottom: 14px; }
+            .about-block { padding: 20px; }
+            .contact-form { padding: 20px; }
+            .novel-details { padding: 24px 16px; }
+            .reader-wrap { padding: 20px 14px 60px; }
+            .reader-content { font-size: 15.5px; line-height: 2; }
+        }
+        @media (max-width: 374px) {
+            .container { padding: 0 12px; }
+            .header-inner { padding: 8px 0; min-height: 56px; gap: 8px; }
+            .menu-btn, .header-spacer { width: 36px; height: 36px; font-size: 18px; }
+            .header-brand .logo { width: 36px; height: 36px; }
+            .header-brand .brand-text .name { font-size: 14px; }
+            .header-brand .brand-text .tag { font-size: 7px; letter-spacing: 1.5px; }
+            .hero { padding: 32px 0 24px; }
+            .hero h1 { font-size: 24px; }
+            .hero p { font-size: 12px; }
+            .novel-card .body h3 { font-size: 12px; }
+            .episode-card .body h3 { font-size: 13px; }
+            .episode-card .body .description { font-size: 11px; }
+            .reader-content { font-size: 15px; }
+        }
+        @media (hover: none) and (pointer: coarse) {
+            .novel-card:hover { transform: none; box-shadow: none; }
+            .novel-card:hover .cover img { transform: none; }
+            .btn-primary:hover, .btn-secondary:hover { transform: none; }
+            .episode-card:hover { transform: none; box-shadow: none; }
+            .episode-card:hover .thumb img { transform: none; }
+            .episode-card:hover .play-btn { transform: translate(-50%, -50%); }
+            .sidebar-nav a:hover { background: transparent; color: var(--text-secondary); border-right-color: transparent; }
+            .sidebar-nav a.active { background: var(--bg-hover); color: var(--gold); border-right-color: var(--gold); }
+        }
+    </style>
 </head>
 <body>
-<header class="nav">
-  <a class="brand" href="index.html">الأماكن <span>3:13</span></a>
-  <nav><a href="index.html">الرئيسية</a><a href="reader.html">القراءة</a></nav>
-  <button class="icon-btn" id="themeBtn" aria-label="الوضع الليلي">☾</button>
-</header>
 
-<main>
-<section class="hero">
-  <div class="hero-cover"><div class="cover-inner"><small>رواية</small><h1>الأماكن<br><b>3:13</b></h1><span>حكاية من الذاكرة والواقع</span></div></div>
-  <div class="hero-copy">
-    <p class="eyebrow">رواية • 13 فصلاً + خاتمة</p>
-    <h2>حين تصبح الأماكن<br><em>ذاكرة لا تنسى</em></h2>
-    <p>رواية تدور حول رامي وعسل وسلمى، وتلامس التعلّق والوفاء والذكريات وقبول الحقيقة والوداع.</p>
-    <div class="actions"><a class="btn primary" href="reader.html">ابدأ القراءة</a><a class="btn ghost" href="assets/novel.pdf" download>تحميل PDF</a></div>
-  </div>
-</section>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <button class="menu-btn" id="menuBtn" aria-label="القائمة">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="header-brand" onclick="navigate('home')">
+                    <div class="logo">
+                        <img id="headerLogoImg" src="logo.jpeg" alt="Logo" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-eye\' style=\'color:var(--gold);\'></i>';" />
+                    </div>
+                    <div class="brand-text">
+                        <span class="name" id="headerSiteName">عدسة الروايات</span>
+                        <span class="tag" id="headerSiteTag">LENS OF NOVELS</span>
+                    </div>
+                </a>
+                <div class="header-spacer"></div>
+            </div>
+        </div>
+    </header>
 
-<section class="section">
-  <div class="section-head"><div><p class="eyebrow">عن الرواية</p><h2>الأماكن 3:13</h2></div><span class="badge">32 صفحة</span></div>
-  <div class="info-card">
-    <p>تتابع الرواية حكاية رامي وما يرتبط في ذاكرته بالأماكن والأشخاص. تتنقل الأحداث بين الذكريات والواقع، وتظهر فيها لحظات المواجهة والتخيّل ثم تقبّل الحقيقة والوداع. يمكنك الآن قراءة النص الكامل لكل فصل مباشرة من الموقع.</p>
-  </div>
-</section>
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-mini">
+                <div class="icon">
+                    <img id="sidebarLogoImg" src="logo.jpeg" alt="Logo" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-eye\' style=\'color:var(--gold);\'></i>';" />
+                </div>
+                <div class="text">
+                    <span class="name" id="sidebarSiteName">عدسة الروايات</span>
+                    <span class="sub" id="sidebarSiteTag">LENS OF NOVELS</span>
+                </div>
+            </div>
+            <button class="sidebar-close" id="sidebarClose" aria-label="إغلاق">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a data-nav="home" class="active"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a>
+            <a data-nav="novels"><i class="fas fa-book"></i><span>الروايات</span></a>
+            <a data-nav="episodes"><i class="fas fa-film"></i><span>الحلقات والفيديوهات</span></a>
+            <a data-nav="announcements"><i class="fas fa-bullhorn"></i><span>الإعلانات</span></a>
+            <a data-nav="about"><i class="fas fa-users"></i><span>عن الفريق</span></a>
+            <a data-nav="contact"><i class="fas fa-envelope"></i><span>تواصل معنا</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <div>جميع الحقوق محفوظة &copy; 2026</div>
+            <div class="dev" id="sidebarDev">بهاء الدين الحسين</div>
+            <div style="direction: ltr;" id="sidebarPhone">0982520358</div>
+        </div>
+    </aside>
 
-<section class="section">
-  <div class="section-head"><div><p class="eyebrow">الفصول</p><h2>رحلة الحكاية</h2></div></div>
-  <div class="chapters-grid"><a class="chapter-card" href="chapters/chapter-1.html"><span>01</span><div><b>الفصل الأول: كنت صغيرة</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-2.html"><span>02</span><div><b>الفصل الثاني: عند أبوها</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-3.html"><span>03</span><div><b>الفصل الثالث: وبرجع للواقع</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-4.html"><span>04</span><div><b>الفصل الرابع: أول طاولتين محجوزين</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-5.html"><span>05</span><div><b>الفصل الخامس: مفتشة</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-6.html"><span>06</span><div><b>الفصل السادس: نفس الطاولة</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-7.html"><span>07</span><div><b>الفصل السابع</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-8.html"><span>08</span><div><b>الفصل الثامن</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-9.html"><span>09</span><div><b>الفصل التاسع: المواجهة</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-10.html"><span>10</span><div><b>الفصل العاشر: رجع يتخيل</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-11.html"><span>11</span><div><b>الفصل الحادي عشر: سلمى</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-12.html"><span>12</span><div><b>الفصل الثاني عشر: تقبل الحقيقة والوداع</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-13.html"><span>13</span><div><b>الفصل الثالث عشر والأخير</b><small>قراءة الفصل</small></div><strong>←</strong></a>
-<a class="chapter-card" href="chapters/chapter-14.html"><span>14</span><div><b>الخاتمة</b><small>قراءة الفصل</small></div><strong>←</strong></a></div>
-</section>
+    <!-- ==================== HOME ==================== -->
+    <div class="page active" id="page-home">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    <span id="heroBadgeText">عالم الإبداع القصصي والإنتاج السينمائي</span>
+                </div>
+                <h1>
+                    <span id="heroTitle1">مرحباً بكم في عالم</span>
+                    <span class="gold" id="heroTitle2">عدسة الروايات</span>
+                </h1>
+                <p id="heroDescText">
+                    تأخذكم في رحلات بصرية وسماعية استثنائية عبر أعماق الروايات والقصص،
+                    نقل السطور المكتوبة إلى مشاهد حية وحلقات تشويقية بأسلوب سينمائي مبتكر.
+                </p>
+                <div class="hero-buttons">
+                    <a class="btn-primary" onclick="navigate('episodes')">
+                        <i class="fas fa-play"></i><span>شاهد أحدث الحلقات</span>
+                    </a>
+                    <a class="btn-secondary" onclick="navigate('novels')">
+                        <i class="fas fa-book-open"></i><span>استكشف الروايات</span>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-<section class="cta"><h2>جاهز للعودة إلى الحكاية؟</h2><p>افتح القارئ واستكمل القراءة من المكان الذي توقفت عنده.</p><a class="btn primary" href="reader.html">فتح القارئ</a></section>
-</main>
-<footer>© 2026 — الأماكن 3:13</footer>
-<script src="script.js"></script>
-</body></html>
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="title-group">
+                        <div class="title-icon"><i class="fas fa-book"></i></div>
+                        <h2>الروايات المميزة</h2>
+                    </div>
+                    <a class="view-all" onclick="navigate('novels')">
+                        <span>عرض الكل</span><i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="novels-grid" id="homeNovelsGrid"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="title-group">
+                        <div class="title-icon"><i class="fas fa-film"></i></div>
+                        <h2>أحدث الحلقات</h2>
+                    </div>
+                    <a class="view-all" onclick="navigate('episodes')">
+                        <span>عرض الكل</span><i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="episodes-grid" id="homeEpisodesGrid"></div>
+            </div>
+        </section>
+
+        <section class="team-poster-section">
+            <div class="container">
+                <div class="team-poster">
+                    <img id="teamPosterImg" src="logo.jpeg" alt="فريق عدسة الروايات" onerror="this.style.display='none'" />
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== NOVELS ==================== -->
+    <div class="page" id="page-novels">
+        <div class="page-header">
+            <div class="container">
+                <div class="page-icon"><i class="fas fa-book"></i></div>
+                <h1>الروايات</h1>
+                <p>مجموعة من الروايات العربية المميزة التي نعمل على تحويلها إلى تجارب بصرية وسماعية فريدة.</p>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="novels-grid" id="allNovelsGrid"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== NOVEL DETAILS ==================== -->
+    <div class="page" id="page-novel-details">
+        <div class="novel-details" id="novelDetailsContent"></div>
+    </div>
+
+    <!-- ==================== READER ==================== -->
+    <div class="page" id="page-reader">
+        <div class="reader-wrap" id="readerContent"></div>
+    </div>
+
+    <!-- ==================== EPISODES ==================== -->
+    <div class="page" id="page-episodes">
+        <div class="page-header">
+            <div class="container">
+                <div class="page-icon"><i class="fas fa-film"></i></div>
+                <h1>الحلقات والفيديوهات</h1>
+                <p>شاهد أحدث الحلقات والفيديوهات التي تقدمها عدسة الروايات بأسلوب سينمائي مبتكر.</p>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="episodes-grid" id="allEpisodesGrid"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== ANNOUNCEMENTS ==================== -->
+    <div class="page" id="page-announcements">
+        <div class="page-header">
+            <div class="container">
+                <div class="page-icon"><i class="fas fa-bullhorn"></i></div>
+                <h1>الإعلانات</h1>
+                <p>تابع آخر أخبار وإعلانات فريق عدسة الروايات.</p>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="announcements-list" id="announcementsList"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== ABOUT ==================== -->
+    <div class="page" id="page-about">
+        <div class="page-header">
+            <div class="container">
+                <div class="page-icon"><i class="fas fa-users"></i></div>
+                <h1>عن الفريق</h1>
+                <p>تعرف على فريق عدسة الروايات، رسالتنا، ورؤيتنا.</p>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-block">
+                        <h2><i class="fas fa-eye"></i> من نحن</h2>
+                        <p id="aboutWhoText">عدسة الروايات هو فريق إبداعي متخصص في تحويل الروايات والقصص المكتوبة إلى محتوى مرئي وسماعي بأسلوب سينمائي مبتكر.</p>
+                    </div>
+                    <div class="about-block">
+                        <h2><i class="fas fa-bullseye"></i> رسالتنا</h2>
+                        <p id="aboutMissionText">تقديم محتوى قصصي عربي أصيل بجودة عالية، وإعادة إحياء الروايات في قوالب بصرية وسماعية حديثة تلامس المشاعر وتترك أثراً لدى الجمهور.</p>
+                    </div>
+                    <div class="about-block">
+                        <h2><i class="fas fa-binoculars"></i> رؤيتنا</h2>
+                        <p id="aboutVisionText">أن نكون الوجهة الأولى لعشاق الروايات العربية في العالم الرقمي، وأن نقدم تجربة سينمائية فريدة تجمع بين عمق النص وجمال الصورة.</p>
+                    </div>
+                    <div class="about-block">
+                        <h2><i class="fas fa-users"></i> فريق العمل</h2>
+                        <div class="team-grid" id="teamGridAbout"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== CONTACT ==================== -->
+    <div class="page" id="page-contact">
+        <div class="page-header">
+            <div class="container">
+                <div class="page-icon"><i class="fas fa-envelope"></i></div>
+                <h1>تواصل معنا</h1>
+                <p>نحن هنا للإجابة على استفساراتكم واستقبال اقتراحاتكم.</p>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="contact-grid" id="contactGrid"></div>
+                    <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                        <h3><i class="fas fa-paper-plane"></i> أرسل لنا رسالة</h3>
+                        <div class="form-group">
+                            <label for="cName">الاسم</label>
+                            <input type="text" id="cName" placeholder="أدخل اسمك" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="cEmail">البريد الإلكتروني</label>
+                            <input type="email" id="cEmail" placeholder="example@email.com" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="cMessage">الرسالة</label>
+                            <textarea id="cMessage" placeholder="اكتب رسالتك هنا..." required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">
+                            <i class="fas fa-paper-plane"></i><span>إرسال الرسالة</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- VIDEO MODAL -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-inner">
+            <div class="video-modal-header">
+                <div class="title-info">
+                    <span class="episode-label" id="modalEpisodeLabel">
+                        <i class="fas fa-circle"></i><span>الحلقة</span>
+                    </span>
+                    <span class="title" id="modalTitle">عنوان الحلقة</span>
+                </div>
+                <button class="video-modal-close" id="modalClose" aria-label="إغلاق">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="video-modal-body">
+                <div class="video-wrapper" id="videoWrapper"></div>
+            </div>
+            <div class="video-modal-description" id="modalDescription"><p></p></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">
+                <div class="logo">
+                    <img id="footerLogoImg" src="logo.jpeg" alt="Logo" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-eye\' style=\'color:var(--gold);font-size:28px;\'></i>';" />
+                </div>
+                <div class="name" id="footerSiteName">عدسة الروايات</div>
+                <div class="sub" id="footerSiteTag">LENS OF NOVELS</div>
+            </div>
+            <div class="footer-links">
+                <a onclick="navigate('home')">الرئيسية</a>
+                <a onclick="navigate('novels')">الروايات</a>
+                <a onclick="navigate('episodes')">الحلقات</a>
+                <a onclick="navigate('announcements')">الإعلانات</a>
+                <a onclick="navigate('about')">عن الفريق</a>
+                <a onclick="navigate('contact')">تواصل معنا</a>
+            </div>
+            <div class="footer-bottom">
+                <div>❤️ جميع الحقوق محفوظة &copy; 2026 <span class="author" id="footerAuthorName">عدسة الروايات</span></div>
+                <div>🔧 برمجة وتطوير: <span class="dev" id="footerDevName">بهاء الدين الحسين</span> | <span class="phone" id="footerPhone">0982520358</span></div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        /* ============================================================
+           FIREBASE SETUP & DATA FETCHING
+           ============================================================ */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAKkjqWQ3cNFUxocfdrehiUI6VJTYVu-c",
+            authDomain: "lens-of-novels.firebaseapp.com",
+            projectId: "lens-of-novels",
+            storageBucket: "lens-of-novels.firebasestorage.app",
+            messagingSenderId: "462776756608",
+            appId: "1:462776756608:web:84158b6879f88a90da7965"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // المتغيرات العامة
+        let novels = [];
+        let episodes = [];
+        let team = [];
+        let contact = {};
+        let announcements = [];
+        let site = {};
+        let about = {};
+
+        let currentReader = { novelId: null };
+
+        // المتغيرات الافتراضية (في حال كانت قاعدة البيانات فارغة)
+        const defaultNovels = [];
+        const defaultEpisodes = [];
+        const defaultTeam = [
+            {name:'بهاء الدين الحسين',role:'البرمجة والتطوير',icon:'fa-code'},
+            {name:'شادي رحال',role:'الكتابة',icon:'fa-pen-fancy'},
+            {name:'عائشة و دهب',role:'الإعلام',icon:'fa-bullhorn'},
+            {name:'المجاهد',role:'التصوير والمونتاج',icon:'fa-camera'}
+        ];
+        const defaultContact = { phone:'0982520358', whatsapp:'+963982520358', email:'info@lensofnovels.com', dev:'بهاء الدين الحسين' };
+        const defaultAnnouncements = [];
+        const defaultSite = {
+            name: 'عدسة الروايات',
+            tag: 'LENS OF NOVELS',
+            heroBadge: 'عالم الإبداع القصصي والإنتاج السينمائي',
+            heroTitle1: 'مرحباً بكم في عالم',
+            heroTitle2: 'عدسة الروايات',
+            heroDesc: 'تأخذكم في رحلات بصرية وسماعية استثنائية عبر أعماق الروايات والقصص، نقل السطور المكتوبة إلى مشاهد حية وحلقات تشويقية بأسلوب سينمائي مبتكر.',
+            logo: ''
+        };
+        const defaultAbout = {
+            who: 'عدسة الروايات هو فريق إبداعي متخصص في تحويل الروايات والقصص المكتوبة إلى محتوى مرئي وسماعي بأسلوب سينمائي مبتكر. نؤمن بأن الكلمة المكتوبة قادرة على أن تصبح مشهداً حياً ينبض بالحياة، ونعمل على تحقيق ذلك من خلال مزيج من السرد القصصي والإنتاج البصري.',
+            mission: 'تقديم محتوى قصصي عربي أصيل بجودة عالية، وإعادة إحياء الروايات في قوالب بصرية وسماعية حديثة تلامس المشاعر وتترك أثراً لدى الجمهور.',
+            vision: 'أن نكون الوجهة الأولى لعشاق الروايات العربية في العالم الرقمي، وأن نقدم تجربة سينمائية فريدة تجمع بين عمق النص وجمال الصورة.'
+        };
+
+        // دالة لجلب كل البيانات من Firebase
+        async function fetchDataFromFirebase() {
+            try {
+                // 1. الإعدادات
+                const setSnap = await getDoc(doc(db, "settings", "site"));
+                site = setSnap.exists() ? setSnap.data() : defaultSite;
+                contact = setSnap.exists() ? setSnap.data() : defaultContact; // افترض أن التواصل في نفس المستند
+
+                // 2. الروايات
+                const nSnap = await getDocs(collection(db, "novels"));
+                novels = [];
+                nSnap.forEach(d => novels.push({ id: d.id, ...d.data() }));
+
+                // 3. الفيديوهات
+                const eSnap = await getDocs(collection(db, "episodes"));
+                episodes = [];
+                eSnap.forEach(d => episodes.push({ id: d.id, ...d.data() }));
+
+                // 4. الفريق
+                const tSnap = await getDocs(collection(db, "team"));
+                team = [];
+                tSnap.forEach(d => team.push({ id: d.id, ...d.data() }));
+
+                // 5. الإعلانات
+                const annSnap = await getDocs(collection(db, "announcements"));
+                announcements = [];
+                annSnap.forEach(d => announcements.push({ id: d.id, ...d.data() }));
+                if (announcements.length === 0) announcements = defaultAnnouncements;
+
+                // 6. About (إذا كان مخزناً في نفس مستند الإعدادات)
+                about = setSnap.exists() ? setSnap.data() : defaultAbout;
+
+                // تحديث الواجهة
+                applySiteSettings();
+                renderAll();
+            } catch (e) {
+                console.error("Error fetching data from Firebase:", e);
+                // في حال فشل الاتصال، اعرض البيانات الافتراضية
+                novels = defaultNovels;
+                episodes = defaultEpisodes;
+                team = defaultTeam;
+                contact = defaultContact;
+                site = defaultSite;
+                about = defaultAbout;
+                announcements = defaultAnnouncements;
+                applySiteSettings();
+                renderAll();
+            }
+        }
+
+        /* ============================================================
+           APPLY SITE SETTINGS (نفس الكود السابق)
+           ============================================================ */
+        function applySiteSettings() {
+            const name = site.name || 'عدسة الروايات';
+            const tag = site.tag || 'LENS OF NOVELS';
+
+            document.getElementById('headerSiteName').textContent = name;
+            document.getElementById('headerSiteTag').textContent = tag;
+            document.getElementById('sidebarSiteName').textContent = name;
+            document.getElementById('sidebarSiteTag').textContent = tag;
+            document.getElementById('footerSiteName').textContent = name;
+            document.getElementById('footerSiteTag').textContent = tag;
+            document.getElementById('footerAuthorName').textContent = name;
+
+            document.getElementById('heroBadgeText').textContent = site.heroBadge || '';
+            document.getElementById('heroTitle1').textContent = site.heroTitle1 || '';
+            document.getElementById('heroTitle2').textContent = site.heroTitle2 || '';
+            document.getElementById('heroDescText').textContent = site.heroDesc || '';
+
+            document.title = name + ' - LENS OF NOVELS';
+
+            const logoUrl = site.logo || 'logo.jpeg';
+            ['headerLogoImg','sidebarLogoImg','footerLogoImg','teamPosterImg'].forEach(id => {
+                const img = document.getElementById(id);
+                if (img) { img.src = logoUrl; img.style.display = 'block'; }
+            });
+
+            document.getElementById('sidebarDev').textContent = contact.dev || '';
+            document.getElementById('sidebarPhone').textContent = contact.phone || '';
+            document.getElementById('footerDevName').textContent = contact.dev || '';
+            document.getElementById('footerPhone').textContent = contact.phone || '';
+
+            document.getElementById('aboutWhoText').textContent = about.who || '';
+            document.getElementById('aboutMissionText').textContent = about.mission || '';
+            document.getElementById('aboutVisionText').textContent = about.vision || '';
+        }
+
+        /* ============================================================
+           NAVIGATION & UI (نفس الكود السابق)
+           ============================================================ */
+        const allPages = ['home', 'novels', 'episodes', 'announcements', 'about', 'contact', 'novel-details', 'reader'];
+        window.navigate = function(pageId) {
+            allPages.forEach(p => {
+                const el = document.getElementById('page-' + p);
+                if (el) el.classList.remove('active');
+            });
+            const target = document.getElementById('page-' + pageId);
+            if (target) target.classList.add('active');
+            document.querySelectorAll('.sidebar-nav a').forEach(a => {
+                a.classList.toggle('active', a.dataset.nav === pageId);
+            });
+            closeSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ============================================================
+           NOVELS & READER
+           ============================================================ */
+        window.openNovel = function(novelId) {
+            const novel = novels.find(n => n.id === novelId);
+            if (!novel) return;
+
+            const content = document.getElementById('novelDetailsContent');
+            const coverHTML = novel.image
+                ? `<img src="${novel.image}" alt="${novel.title}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-book\\' style=\\'color:var(--gold);\\'></i>'" />`
+                : `<div class="cover-placeholder"><i class="fas fa-book"></i></div>`;
+
+            const charCount = (novel.fullText || '').length;
+            const wordCount = (novel.fullText || '').trim().split(/\s+/).filter(w => w).length;
+            const readTime = Math.max(1, Math.round(wordCount / 200));
+
+            content.innerHTML = `
+                <div class="novel-hero">
+                    <div class="nh-cover">${coverHTML}</div>
+                    <div class="nh-info">
+                        <span class="nh-category">${novel.category || 'عام'}</span>
+                        <h1>${novel.title}</h1>
+                        <p class="nh-desc">${novel.description || ''}</p>
+                        <div class="nh-stats">
+                            <div class="stat">
+                                <span class="num">${charCount.toLocaleString('ar-EG')}</span>
+                                <span class="lbl">حرف</span>
+                            </div>
+                            <div class="stat">
+                                <span class="num">${wordCount.toLocaleString('ar-EG')}</span>
+                                <span class="lbl">كلمة</span>
+                            </div>
+                            <div class="stat">
+                                <span class="num">${readTime}</span>
+                                <span class="lbl">دقيقة قراءة</span>
+                            </div>
+                        </div>
+                        <a class="btn-primary" onclick="openReader('${novel.id}')" style="display:inline-flex;max-width:280px;margin:0 auto 12px;">
+                            <i class="fas fa-book-open"></i>
+                            <span>ابدأ القراءة</span>
+                        </a>
+                        <a class="btn-secondary" onclick="navigate('novels')" style="display:inline-flex;max-width:220px;margin:0 auto;">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>عودة للروايات</span>
+                        </a>
+                    </div>
+                </div>
+            `;
+            navigate('novel-details');
+        }
+
+        window.openReader = function(novelId) {
+            const novel = novels.find(n => n.id === novelId);
+            if (!novel) return;
+            currentReader = { novelId };
+            renderReader();
+            navigate('reader');
+        }
+
+        function renderReader() {
+            const novel = novels.find(n => n.id === currentReader.novelId);
+            if (!novel) return;
+
+            const text = novel.fullText || 'لا يوجد محتوى لهذه الرواية.';
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).map(p => `<p>${escapeHtml(p.trim()).replace(/\n/g, '<br>')}</p>`).join('');
+
+            const content = `
+                <div class="reader-topbar">
+                    <button class="reader-back" onclick="backToNovelDetails()">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة للرواية</span>
+                    </button>
+                </div>
+                <div class="reader-header">
+                    <div class="r-category">${novel.category || 'عام'}</div>
+                    <h1>${novel.title}</h1>
+                    <p class="r-desc">${novel.description || ''}</p>
+                </div>
+                <div class="reader-content">${paragraphs}</div>
+                <div class="reader-footer-nav">
+                    <button onclick="backToNovelDetails()">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة للرواية</span>
+                    </button>
+                </div>
+            `;
+            document.getElementById('readerContent').innerHTML = content;
+        }
+
+        window.backToNovelDetails = function() {
+            openNovel(currentReader.novelId);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        /* ============================================================
+           RENDER CARDS & LISTS
+           ============================================================ */
+        function novelCardHTML(n) {
+            const coverHTML = n.image
+                ? `<img src="${n.image}" alt="غلاف ${n.title}" loading="lazy" onerror="this.style.display='none'" />`
+                : `<div class="cover-placeholder"><i class="fas fa-book"></i></div>`;
+            const words = (n.fullText || '').trim().split(/\s+/).filter(w => w).length;
+            return `
+                <div class="novel-card" onclick="openNovel('${n.id}')">
+                    <div class="cover">
+                        ${coverHTML}
+                        <span class="category-tag">${n.category || 'عام'}</span>
+                    </div>
+                    <div class="body">
+                        <h3>${n.title}</h3>
+                        <div class="meta">
+                            <span><i class="fas fa-align-right"></i> ${words.toLocaleString('ar-EG')} كلمة</span>
+                            <span><i class="fas fa-tag"></i> ${n.category || 'عام'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function episodeCardHTML(ep) {
+            const thumbHTML = ep.image
+                ? `<img src="${ep.image}" alt="${ep.title}" loading="lazy" onerror="this.style.display='none'" />`
+                : `<div class="thumb-placeholder"><i class="fas fa-film"></i></div>`;
+            return `
+                <div class="episode-card" data-id="${ep.id}" role="button" tabindex="0" onclick="openVideo('${ep.id}')">
+                    <div class="thumb">
+                        ${thumbHTML}
+                        <span class="category-badge">${ep.novel || ''}</span>
+                        <div class="play-btn"><i class="fas fa-play"></i></div>
+                        <span class="duration">${ep.duration || '00:00'}</span>
+                    </div>
+                    <div class="body">
+                        <div class="episode-num">
+                            <i class="fas fa-circle"></i>
+                            <span>الحلقة ${ep.episodeNum || 1}</span>
+                        </div>
+                        <h3>${ep.title}</h3>
+                        <p class="description">${ep.description || ''}</p>
+                        <div class="meta">
+                            <span><i class="fas fa-calendar"></i> ${ep.date || ''}</span>
+                            <span><i class="fas fa-clock"></i> ${ep.duration || '00:00'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAll() {
+            const homeNovelsEl = document.getElementById('homeNovelsGrid');
+            const homeEpisodesEl = document.getElementById('homeEpisodesGrid');
+            const allNovelsEl = document.getElementById('allNovelsGrid');
+            const allEpisodesEl = document.getElementById('allEpisodesGrid');
+
+            if (homeNovelsEl) homeNovelsEl.innerHTML = novels.slice(0, 6).map(n => novelCardHTML(n)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-book"></i><p>لا توجد روايات بعد</p></div>';
+            if (homeEpisodesEl) homeEpisodesEl.innerHTML = episodes.slice(0, 6).map(ep => episodeCardHTML(ep)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-film"></i><p>لا توجد حلقات بعد</p></div>';
+            if (allNovelsEl) allNovelsEl.innerHTML = novels.map(n => novelCardHTML(n)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-book"></i><p>لا توجد روايات بعد</p></div>';
+            if (allEpisodesEl) allEpisodesEl.innerHTML = episodes.map(ep => episodeCardHTML(ep)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-film"></i><p>لا توجد حلقات بعد</p></div>';
+
+            const annEl = document.getElementById('announcementsList');
+            if (annEl) {
+                annEl.innerHTML = announcements.map(a => `
+                    <div class="announcement-card">
+                        <div class="ann-head">
+                            <span class="ann-badge">${a.badge}</span>
+                            <span class="ann-date"><i class="fas fa-calendar"></i> ${a.date}</span>
+                        </div>
+                        <h3>${a.title}</h3>
+                        <p>${a.body}</p>
+                    </div>
+                `).join('') || '<div class="empty-state"><i class="fas fa-bullhorn"></i><p>لا توجد إعلانات</p></div>';
+            }
+
+            const teamEl = document.getElementById('teamGridAbout');
+            if (teamEl) {
+                teamEl.innerHTML = team.map(m => `
+                    <div class="team-member">
+                        <div class="avatar"><i class="fas ${m.icon || 'fa-user'}"></i></div>
+                        <div class="m-name">${m.name}</div>
+                        <div class="m-role">${m.role}</div>
+                    </div>
+                `).join('');
+            }
+
+            const contactEl = document.getElementById('contactGrid');
+            if (contactEl) {
+                contactEl.innerHTML = `
+                    <a class="contact-item" href="tel:${contact.phone}">
+                        <div class="c-icon"><i class="fas fa-phone"></i></div>
+                        <div class="c-info">
+                            <div class="c-label">الهاتف</div>
+                            <div class="c-value ltr">${contact.phone}</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="https://wa.me/${(contact.whatsapp||'').replace(/[^0-9]/g, '')}" target="_blank">
+                        <div class="c-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="c-info">
+                            <div class="c-label">واتساب</div>
+                            <div class="c-value ltr">${contact.whatsapp}</div>
+                        </div>
+                    </a>
+                    <a class="contact-item" href="mailto:${contact.email}">
+                        <div class="c-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="c-info">
+                            <div class="c-label">البريد الإلكتروني</div>
+                            <div class="c-value ltr">${contact.email}</div>
+                        </div>
+                    </a>
+                    <div class="contact-item">
+                        <div class="c-icon"><i class="fas fa-code"></i></div>
+                        <div class="c-info">
+                            <div class="c-label">البرمجة والتطوير</div>
+                            <div class="c-value">${contact.dev}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        /* ============================================================
+           VIDEO MODAL & SIDEBAR
+           ============================================================ */
+        const modal = document.getElementById('videoModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalEpisodeLabel = document.getElementById('modalEpisodeLabel');
+        const modalDescription = document.getElementById('modalDescription');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const modalClose = document.getElementById('modalClose');
+
+        window.openVideo = function(id) {
+            const ep = episodes.find(e => e.id === id);
+            if (!ep) return;
+            modalTitle.textContent = ep.title;
+            modalEpisodeLabel.querySelector('span').textContent = `الحلقة ${ep.episodeNum} • ${ep.novel}`;
+            modalDescription.querySelector('p').textContent = ep.description;
+
+            let videoHTML = '';
+            if (ep.source === 'streamable' && ep.streamableId) {
+                videoHTML = `<iframe src="https://streamable.com/e/${ep.streamableId}?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe>`;
+            } else if (ep.source === 'youtube' && ep.youtubeId) {
+                videoHTML = `<iframe src="https://www.youtube.com/embed/${ep.youtubeId}?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe>`;
+            }
+            videoWrapper.innerHTML = videoHTML;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideo() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => { videoWrapper.innerHTML = ''; }, 300);
+        }
+
+        modalClose.addEventListener('click', closeVideo);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeVideo();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeVideo();
+        });
+
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        menuBtn.addEventListener('click', openSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        document.querySelectorAll('.sidebar-nav a').forEach(a => {
+            a.addEventListener('click', function() {
+                navigate(this.dataset.nav);
+            });
+        });
+
+        window.handleContactSubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('cName').value.trim();
+            const email = document.getElementById('cEmail').value.trim();
+            const message = document.getElementById('cMessage').value.trim();
+            if (!name || !email || !message) return;
+            const form = e.target;
+            const originalHTML = form.innerHTML;
+            form.innerHTML = `
+                <div style="text-align:center;padding:30px 10px;">
+                    <i class="fas fa-check-circle" style="font-size:56px;color:var(--gold);margin-bottom:16px;"></i>
+                    <h3 style="color:var(--text);margin-bottom:10px;">تم إرسال رسالتك بنجاح!</h3>
+                    <p style="color:var(--text-secondary);font-size:14px;">شكراً ${name}، سنتواصل معك قريباً على ${email}.</p>
+                </div>
+            `;
+            setTimeout(() => { form.innerHTML = originalHTML; }, 5000);
+        }
+
+        /* ============================================================
+           INIT
+           ============================================================ */
+        // تشغيل جلب البيانات بمجرد تحميل الصفحة
+        fetchDataFromFirebase();
+    </script>
+</body>
+</html>
