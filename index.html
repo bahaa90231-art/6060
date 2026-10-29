@@ -22,6 +22,7 @@
             --shadow: 0 8px 24px rgba(0,0,0,0.5); --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
             --shadow-gold: 0 8px 24px rgba(245,180,0,0.25);
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #2ecc71;
         }
         html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
         body {
@@ -30,6 +31,23 @@
             overflow-x: hidden; line-height: 1.6;
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
+        
+        /* شاشة التحميل */
+        #preloader {
+            position: fixed; inset: 0; background: var(--bg); z-index: 99999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        #preloader .spinner {
+            width: 70px; height: 70px; border: 3px solid var(--border);
+            border-top-color: var(--gold); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 24px;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+        #preloader p { color: var(--gold); font-weight: 800; font-size: 18px; letter-spacing: 2px; font-family: 'Cairo'; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loaded #preloader { opacity: 0; visibility: hidden; }
+
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
 
         /* HEADER */
@@ -50,7 +68,7 @@
             font-size: 22px; transition: all var(--transition); border-radius: var(--radius-sm);
             flex-shrink: 0;
         }
-        .menu-btn:active { background: var(--bg-hover); }
+        .menu-btn:hover { background: var(--bg-hover); color: var(--gold); }
         .header-brand {
             display: flex; align-items: center; gap: 12px; text-decoration: none;
             color: var(--text); flex: 1; justify-content: center; cursor: pointer;
@@ -61,693 +79,204 @@
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 20px var(--gold-glow); flex-shrink: 0; position: relative;
         }
-        .header-brand .logo img {
-            width: 100%; height: 100%; object-fit: cover; object-position: center 35%;
-        }
+        .header-brand .logo img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
         .header-brand .brand-text { display: flex; flex-direction: column; line-height: 1.15; text-align: center; }
-        .header-brand .brand-text .name { font-weight: 800; font-size: 17px; color: var(--gold); letter-spacing: -0.01em; }
-        .header-brand .brand-text .tag { font-size: 9px; color: var(--text-muted); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; }
+        .header-brand .brand-text .name { font-weight: 800; font-size: 18px; color: var(--gold); letter-spacing: -0.01em; }
+        .header-brand .brand-text .tag { font-size: 9px; color: var(--text-muted); font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
         .header-spacer { width: 42px; flex-shrink: 0; }
 
         /* SIDEBAR */
         .sidebar-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            z-index: 998; opacity: 0; visibility: hidden; transition: all var(--transition);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px); z-index: 998; opacity: 0; visibility: hidden; transition: all var(--transition);
         }
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
         .sidebar {
             position: fixed; top: 0; right: -320px; width: 300px; max-width: 85vw;
             height: 100vh; background: var(--bg-secondary); border-left: 1px solid var(--border);
             z-index: 999; transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto; display: flex; flex-direction: column;
+            display: flex; flex-direction: column;
         }
-        .sidebar.active { right: 0; box-shadow: -20px 0 60px rgba(0,0,0,0.7); }
-        .sidebar-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 20px; border-bottom: 1px solid var(--border);
-        }
+        .sidebar.active { right: 0; box-shadow: -20px 0 60px rgba(0,0,0,0.8); }
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid var(--border); }
         .sidebar-header .logo-mini { display: flex; align-items: center; gap: 10px; }
-        .sidebar-header .logo-mini .icon {
-            width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card);
-            border: 2px solid var(--gold); overflow: hidden; position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .sidebar-header .logo-mini .icon img {
-            width: 100%; height: 100%; object-fit: cover; object-position: center 35%;
-        }
-        .sidebar-header .logo-mini .text { display: flex; flex-direction: column; }
+        .sidebar-header .logo-mini .icon { width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--gold); overflow: hidden; }
+        .sidebar-header .logo-mini .icon img { width: 100%; height: 100%; object-fit: cover; }
         .sidebar-header .logo-mini .text .name { font-size: 15px; font-weight: 800; color: var(--gold); }
         .sidebar-header .logo-mini .text .sub { font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
-        .sidebar-close {
-            width: 36px; height: 36px; background: transparent; border: 1px solid var(--border);
-            border-radius: 50%; color: var(--text-secondary); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all var(--transition); font-size: 14px;
-        }
-        .sidebar-close:hover { background: var(--bg-hover); color: var(--gold); border-color: var(--border-hover); }
+        .sidebar-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .sidebar-close:hover { background: var(--bg-hover); color: var(--gold); }
         .sidebar-nav { padding: 16px 0; flex: 1; }
-        .sidebar-nav a {
-            display: flex; align-items: center; gap: 14px; padding: 14px 24px;
-            color: var(--text-secondary); text-decoration: none; font-size: 15px;
-            font-weight: 600; transition: all var(--transition);
-            border-right: 3px solid transparent; cursor: pointer;
-        }
-        .sidebar-nav a:hover, .sidebar-nav a.active {
-            color: var(--gold); background: var(--bg-hover); border-right-color: var(--gold);
-        }
-        .sidebar-nav a i { width: 22px; font-size: 17px; text-align: center; color: var(--text-muted); transition: color var(--transition); }
-        .sidebar-nav a:hover i, .sidebar-nav a.active i { color: var(--gold); }
-        .sidebar-footer {
-            padding: 20px 24px; border-top: 1px solid var(--border);
-            font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.7;
-        }
+        .sidebar-nav a { display: flex; align-items: center; gap: 14px; padding: 14px 24px; color: var(--text-secondary); text-decoration: none; font-size: 15px; font-weight: 600; border-right: 3px solid transparent; cursor: pointer; transition: all var(--transition); }
+        .sidebar-nav a:hover, .sidebar-nav a.active { color: var(--gold); background: var(--bg-hover); border-right-color: var(--gold); }
+        .sidebar-nav a i { width: 22px; text-align: center; font-size: 18px; }
+        .sidebar-footer { padding: 20px 24px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); text-align: center; }
         .sidebar-footer .dev { color: var(--gold); font-weight: 700; }
 
-        /* PAGE SYSTEM */
-        .page { display: none; animation: pageFadeIn 0.4s ease; }
+        /* PAGES SYSTEM */
+        .page { display: none; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
-        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* HERO */
-        .hero { padding: 60px 0 40px; text-align: center; position: relative; overflow: hidden; }
+        .hero { padding: 70px 0 50px; text-align: center; position: relative; overflow: hidden; }
         .hero::before {
             content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at 50% 0%, var(--gold-glow), transparent 60%),
                         radial-gradient(circle at 20% 100%, rgba(245,180,0,0.05), transparent 50%);
             pointer-events: none; z-index: -1;
         }
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px;
-            background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.25);
-            border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--gold);
-            margin-bottom: 24px; letter-spacing: 0.5px;
-        }
-        .hero h1 {
-            font-size: clamp(28px, 7vw, 68px); font-weight: 900; line-height: 1.15;
-            letter-spacing: -0.02em; margin-bottom: 8px; color: var(--text);
-        }
-        .hero h1 .gold {
-            color: var(--gold); display: block; margin-top: 4px;
-            background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .hero p {
-            font-size: clamp(13px, 1.5vw, 16px); color: var(--text-secondary);
-            max-width: 680px; margin: 20px auto 32px; line-height: 1.9; padding: 0 12px;
-        }
-        .hero-buttons { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto; padding: 0 16px; }
-        .btn-primary {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 16px 28px; background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #0A0A0A; border: none; border-radius: 100px; font-family: inherit;
-            font-size: 15px; font-weight: 800; cursor: pointer; transition: all var(--transition);
-            text-decoration: none; box-shadow: var(--shadow-gold); letter-spacing: 0.02em;
-        }
-        .btn-primary:active { transform: scale(0.97); }
-        .btn-secondary {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 16px 28px; background: transparent; color: var(--text);
-            border: 1.5px solid var(--border-hover); border-radius: 100px;
-            font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
-            transition: all var(--transition); text-decoration: none;
-        }
-        .btn-secondary:active { background: var(--bg-hover); border-color: var(--gold); color: var(--gold); }
-        .btn-secondary i { color: var(--gold); font-size: 16px; }
-
-        /* PAGE HEADER */
-        .page-header {
-            padding: 50px 0 30px; text-align: center; position: relative;
-            border-bottom: 1px solid var(--border);
-        }
-        .page-header::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at 50% 0%, var(--gold-glow), transparent 70%);
-            pointer-events: none; z-index: -1;
-        }
-        .page-header .page-icon {
-            width: 68px; height: 68px; margin: 0 auto 18px;
-            background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.25);
-            border-radius: 18px; display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 28px;
-        }
-        .page-header h1 { font-size: clamp(24px, 5vw, 40px); font-weight: 900; color: var(--text); margin-bottom: 10px; }
-        .page-header p { font-size: 14px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; padding: 0 16px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.25); border-radius: 100px; font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 24px; letter-spacing: 0.5px; }
+        .hero h1 { font-size: clamp(32px, 7vw, 72px); font-weight: 900; line-height: 1.15; margin-bottom: 12px; }
+        .hero h1 .gold { color: var(--gold); display: block; background: linear-gradient(180deg, var(--gold-light), var(--gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: clamp(14px, 1.5vw, 18px); color: var(--text-secondary); max-width: 750px; margin: 20px auto 36px; line-height: 1.9; }
+        .hero-buttons { display: flex; flex-direction: column; gap: 16px; max-width: 480px; margin: 0 auto; }
+        .btn-primary { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 28px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #0A0A0A; border-radius: 100px; font-weight: 800; font-size: 16px; text-decoration: none; box-shadow: var(--shadow-gold); transition: all var(--transition); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(245,180,0,0.35); }
+        .btn-secondary { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 28px; background: transparent; color: var(--text); border: 2px solid var(--border-hover); border-radius: 100px; font-weight: 700; font-size: 16px; text-decoration: none; transition: all var(--transition); }
+        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); background: rgba(245,180,0,0.05); }
 
         /* SECTIONS */
         .section { padding: 60px 0 40px; }
-        .section-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
-        }
-        .section-header .title-group { display: flex; align-items: center; gap: 12px; }
-        .section-header .title-icon {
-            width: 42px; height: 42px; background: rgba(245,180,0,0.08);
-            border: 1px solid rgba(245,180,0,0.2); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 18px; flex-shrink: 0;
-        }
-        .section-header h2 { font-size: clamp(20px, 3vw, 28px); font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
-        .section-header .view-all {
-            display: inline-flex; align-items: center; gap: 6px;
-            color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 700;
-            padding: 8px 16px; border-radius: 100px; border: 1px solid rgba(245,180,0,0.25);
-            background: rgba(245,180,0,0.05); transition: all var(--transition); cursor: pointer;
-        }
-        .section-header .view-all:hover { background: rgba(245,180,0,0.1); border-color: var(--gold); }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
+        .section-header .title-group { display: flex; align-items: center; gap: 14px; }
+        .section-header .title-icon { width: 46px; height: 46px; background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 20px; }
+        .section-header h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 800; }
+        .section-header .view-all { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); font-size: 14px; font-weight: 700; padding: 10px 20px; border-radius: 100px; border: 1px solid rgba(245,180,0,0.3); background: rgba(245,180,0,0.05); cursor: pointer; transition: 0.3s; }
+        .section-header .view-all:hover { background: rgba(245,180,0,0.15); }
 
         /* NOVELS GRID */
-        .novels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        .novel-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); overflow: hidden; cursor: pointer;
-            transition: all var(--transition); text-decoration: none; color: inherit;
-            display: flex; flex-direction: column;
-        }
-        .novel-card:active { transform: scale(0.98); border-color: var(--border-hover); }
-        .novel-card .cover {
-            position: relative; width: 100%; aspect-ratio: 3 / 2; overflow: hidden;
-            background: var(--bg-secondary); border-bottom: 1px solid var(--border);
-        }
-        .novel-card .cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
-        .novel-card .cover::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.6) 100%);
-            pointer-events: none;
-        }
-        .novel-card .cover .category-tag {
-            position: absolute; top: 10px; right: 10px; padding: 4px 12px;
-            background: rgba(245,180,0,0.9); color: #0A0A0A; border-radius: 100px;
-            font-size: 10px; font-weight: 800; z-index: 2; letter-spacing: 0.02em;
-        }
-        .novel-card .cover .cover-placeholder {
-            width: 100%; height: 100%; display: flex; align-items: center;
-            justify-content: center; color: var(--gold); font-size: 40px; opacity: 0.3;
-        }
-        .novel-card .body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .novel-card .body h3 {
-            font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .novel-card .body .meta {
-            display: flex; gap: 10px; font-size: 11px; color: var(--text-muted);
-            font-weight: 600; flex-wrap: wrap;
-        }
-        .novel-card .body .meta span { display: flex; align-items: center; gap: 4px; }
-        .novel-card .body .meta i { color: var(--gold); font-size: 10px; }
+        .novels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .novel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all var(--transition); display: flex; flex-direction: column; }
+        .novel-card:hover { transform: translateY(-8px); border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
+        .novel-card .cover { position: relative; width: 100%; aspect-ratio: 3 / 2; background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+        .novel-card .cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .novel-card:hover .cover img { transform: scale(1.05); }
+        .novel-card .cover .category-tag { position: absolute; top: 12px; right: 12px; padding: 5px 14px; background: rgba(245,180,0,0.95); color: #0A0A0A; border-radius: 100px; font-size: 11px; font-weight: 800; z-index: 2; }
+        .novel-card .cover .views-tag { position: absolute; bottom: 12px; left: 12px; padding: 5px 12px; background: rgba(0,0,0,0.85); color: #fff; border-radius: 100px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; z-index: 2; }
+        .novel-card .body { padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .novel-card .body h3 { font-size: 17px; font-weight: 800; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .novel-card .body .meta { display: flex; gap: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; align-items: center; }
+        .novel-card .body .meta i { color: var(--gold); }
 
         /* EPISODES GRID */
-        .episodes-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .episode-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition);
-            cursor: pointer; display: flex; flex-direction: column;
-        }
-        .episode-card:active { transform: scale(0.98); border-color: var(--border-hover); }
-        .episode-card .thumb {
-            position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden;
-            background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .episode-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
-        .episode-card .thumb .thumb-placeholder {
-            width: 100%; height: 100%; display: flex; align-items: center;
-            justify-content: center; color: var(--gold); font-size: 48px; opacity: 0.3;
-        }
-        .episode-card .thumb::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
-            pointer-events: none; z-index: 1;
-        }
-        .episode-card .thumb .play-btn {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 68px; height: 68px; border-radius: 50%;
-            background: rgba(245,180,0,0.95); color: #0A0A0A;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; z-index: 2; transition: all var(--transition);
-            box-shadow: 0 0 30px rgba(245,180,0,0.5), 0 0 0 8px rgba(245,180,0,0.15);
-            padding-left: 5px;
-        }
-        .episode-card:active .play-btn { transform: translate(-50%, -50%) scale(0.9); }
-        .episode-card .thumb .duration {
-            position: absolute; bottom: 10px; left: 10px;
-            background: rgba(0,0,0,0.85); color: #fff; padding: 4px 10px;
-            border-radius: 6px; font-size: 11px; font-weight: 700;
-            z-index: 2; direction: ltr;
-        }
-        .episode-card .thumb .category-badge {
-            position: absolute; top: 10px; right: 10px;
-            background: rgba(245,180,0,0.9); color: #0A0A0A; padding: 4px 12px;
-            border-radius: 100px; font-size: 10px; font-weight: 800; z-index: 2;
-        }
-        .episode-card .body { padding: 18px; display: flex; flex-direction: column; gap: 10px; }
-        .episode-card .body .episode-num {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 11px; font-weight: 800; color: var(--gold);
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .episode-card .body .episode-num i { font-size: 10px; }
-        .episode-card .body h3 {
-            font-size: 16px; font-weight: 800; color: var(--text); line-height: 1.35;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .episode-card .body .description {
-            font-size: 13px; color: var(--text-secondary); line-height: 1.6;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .episode-card .body .meta {
-            display: flex; gap: 14px; font-size: 11px; color: var(--text-muted);
-            font-weight: 600; flex-wrap: wrap; margin-top: 4px;
-            padding-top: 10px; border-top: 1px solid var(--border);
-        }
-        .episode-card .body .meta span { display: flex; align-items: center; gap: 5px; }
-        .episode-card .body .meta i { color: var(--gold); font-size: 10px; }
+        .episodes-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        .episode-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all var(--transition); display: flex; flex-direction: column; }
+        .episode-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
+        .episode-card .thumb { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #111; }
+        .episode-card .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .episode-card:hover .thumb img { transform: scale(1.05); }
+        .episode-card .thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%); }
+        .episode-card .thumb .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; border-radius: 50%; background: rgba(245,180,0,0.95); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #000; z-index: 2; box-shadow: 0 0 30px rgba(245,180,0,0.5); transition: 0.3s; padding-left: 5px; }
+        .episode-card:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); }
+        .episode-card .body { padding: 20px; }
+        .episode-card .body h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .episode-card .body .desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* ANNOUNCEMENTS */
-        .announcements-list { display: flex; flex-direction: column; gap: 16px; }
-        .announcement-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-right: 3px solid var(--gold); border-radius: var(--radius);
-            padding: 20px; transition: all var(--transition);
-        }
-        .announcement-card:hover { background: var(--bg-hover); border-color: var(--border-hover); border-right-color: var(--gold); }
-        .announcement-card .ann-head {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 10px; flex-wrap: wrap;
-        }
-        .announcement-card .ann-head .ann-badge {
-            background: rgba(245,180,0,0.1); color: var(--gold);
-            padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 800;
-        }
-        .announcement-card .ann-head .ann-date { font-size: 11px; color: var(--text-muted); font-weight: 600; }
-        .announcement-card h3 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-        .announcement-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+        /* PAGE HEADER (For Novels/Episodes pages) */
+        .page-header { padding: 50px 0 30px; text-align: center; border-bottom: 1px solid var(--border); background: radial-gradient(circle at 50% 0%, var(--gold-glow), transparent 70%); }
+        .page-header h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 900; margin-bottom: 10px; }
+        .page-header p { font-size: 15px; color: var(--text-secondary); }
 
-        /* ABOUT */
-        .about-content { max-width: 800px; margin: 0 auto; padding: 0 16px; }
-        .about-block {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); padding: 28px; margin-bottom: 20px;
-        }
-        .about-block h2 {
-            font-size: 20px; font-weight: 800; color: var(--gold); margin-bottom: 12px;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .about-block p { font-size: 14px; color: var(--text-secondary); line-height: 1.9; }
-        .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
-        .team-member {
-            background: var(--bg-secondary); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 20px; text-align: center;
-            transition: all var(--transition);
-        }
-        .team-member:hover { border-color: var(--border-hover); transform: translateY(-3px); }
-        .team-member .avatar {
-            width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 50%;
-            background: rgba(245,180,0,0.1); border: 2px solid var(--gold);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 24px;
-        }
-        .team-member .m-name { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-        .team-member .m-role { font-size: 11px; color: var(--gold); font-weight: 700; }
+        /* NOVEL DETAILS & READER */
+        .novel-details { max-width: 1000px; margin: 0 auto; padding: 50px 20px; }
+        .novel-hero { display: flex; flex-direction: column; gap: 40px; margin-bottom: 40px; background: var(--bg-card); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+        .novel-hero .nh-cover { width: 100%; max-width: 320px; margin: 0 auto; aspect-ratio: 3 / 4; border-radius: var(--radius-lg); overflow: hidden; border: 2px solid var(--gold); box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .novel-hero .nh-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .novel-hero .nh-info { flex: 1; text-align: center; }
+        .novel-hero .nh-info .nh-category { display: inline-block; background: rgba(245,180,0,0.15); color: var(--gold); padding: 6px 18px; border-radius: 100px; font-size: 12px; font-weight: 800; margin-bottom: 16px; border: 1px solid rgba(245,180,0,0.3); }
+        .novel-hero .nh-info h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
+        .novel-hero .nh-info .nh-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 30px; }
+        .novel-hero .nh-info .nh-stats { display: flex; justify-content: center; gap: 30px; margin-bottom: 30px; flex-wrap: wrap; }
+        .novel-hero .nh-info .nh-stats .stat { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--bg-secondary); padding: 12px 20px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .novel-hero .nh-info .nh-stats .stat .num { font-size: 24px; font-weight: 900; color: var(--gold); }
+        .novel-hero .nh-info .nh-stats .stat .lbl { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .novel-hero .nh-info .btn-primary { max-width: 300px; margin: 0 auto; }
+
+        .reader-wrap { max-width: 850px; margin: 0 auto; padding: 30px 20px 100px; }
+        .reader-topbar { display: flex; justify-content: space-between; margin-bottom: 30px; align-items: center; }
+        .reader-back { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; color: var(--text-secondary); cursor: pointer; transition: 0.3s; font-weight: 700; }
+        .reader-back:hover { border-color: var(--gold); color: var(--gold); }
+        .reader-header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
+        .reader-header h1 { font-size: clamp(26px, 5vw, 38px); font-weight: 900; margin-bottom: 15px; color: var(--gold); }
+        .reader-content { font-size: 18px; line-height: 2.2; color: #e0e0e0; text-align: justify; white-space: pre-wrap; word-wrap: break-word; }
+        
+        /* Progress Bar */
+        .progress-container { position: fixed; top: 70px; left: 0; width: 100%; height: 4px; background: transparent; z-index: 99; }
+        .progress-bar { height: 100%; background: var(--gold); width: 0%; transition: width 0.1s; box-shadow: 0 0 12px var(--gold); border-radius: 0 4px 4px 0; }
+
+        /* ABOUT & TEAM */
+        .about-content { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .about-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; margin-bottom: 30px; }
+        .about-block h2 { font-size: 22px; font-weight: 800; color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+        .about-block p { font-size: 15px; color: var(--text-secondary); line-height: 2; }
+        .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
+        .team-member { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; transition: 0.3s; }
+        .team-member:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .team-member .avatar { width: 70px; height: 70px; margin: 0 auto 16px; border-radius: 50%; background: rgba(245,180,0,0.1); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 28px; }
+        .team-member .m-name { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+        .team-member .m-role { font-size: 13px; color: var(--gold); font-weight: 700; }
 
         /* CONTACT */
-        .contact-content { max-width: 700px; margin: 0 auto; padding: 0 16px; }
-        .contact-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
-        .contact-item {
-            display: flex; align-items: center; gap: 16px;
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 20px;
-            transition: all var(--transition); text-decoration: none; color: inherit;
-        }
-        .contact-item:hover { border-color: var(--border-hover); background: var(--bg-hover); }
-        .contact-item .c-icon {
-            width: 52px; height: 52px; border-radius: 14px;
-            background: rgba(245,180,0,0.08); border: 1px solid rgba(245,180,0,0.2);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 20px; flex-shrink: 0;
-        }
-        .contact-item .c-info { flex: 1; }
-        .contact-item .c-info .c-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
-        .contact-item .c-info .c-value { font-size: 15px; color: var(--text); font-weight: 700; }
-        .contact-item .c-info .c-value.ltr { direction: ltr; text-align: right; }
-
-        .contact-form {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); padding: 28px;
-        }
-        .contact-form h3 {
-            font-size: 18px; font-weight: 800; color: var(--text);
-            margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
-        }
-        .contact-form h3 i { color: var(--gold); }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
-        .form-group input, .form-group textarea {
-            width: 100%; padding: 12px 16px; background: var(--bg-secondary);
-            border: 1px solid var(--border); border-radius: var(--radius);
-            color: var(--text); font-family: inherit; font-size: 14px;
-            transition: all var(--transition);
-        }
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none; border-color: var(--gold); background: var(--bg-hover);
-        }
-        .form-group textarea { resize: vertical; min-height: 120px; }
-        .form-submit {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #0A0A0A; border: none; border-radius: 100px;
-            font-family: inherit; font-size: 15px; font-weight: 800;
-            cursor: pointer; transition: all var(--transition);
-            box-shadow: var(--shadow-gold); display: flex; align-items: center;
-            justify-content: center; gap: 8px;
-        }
-        .form-submit:active { transform: scale(0.98); }
-
-        /* NOVEL DETAILS */
-        .novel-details { max-width: 900px; margin: 0 auto; padding: 40px 16px; }
-        .novel-hero { display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px; }
-        .novel-hero .nh-cover {
-            width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 3 / 4;
-            border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border);
-            box-shadow: var(--shadow-lg); background: var(--bg-secondary);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .novel-hero .nh-cover img { width: 100%; height: 100%; object-fit: cover; }
-        .novel-hero .nh-cover .cover-placeholder { color: var(--gold); font-size: 60px; opacity: 0.3; }
-        .novel-hero .nh-info { flex: 1; text-align: center; }
-        .novel-hero .nh-info .nh-category {
-            display: inline-block; background: rgba(245,180,0,0.1); color: var(--gold);
-            padding: 4px 14px; border-radius: 100px; font-size: 11px;
-            font-weight: 800; margin-bottom: 12px;
-        }
-        .novel-hero .nh-info h1 {
-            font-size: clamp(24px, 5vw, 36px); font-weight: 900; color: var(--text);
-            margin-bottom: 16px;
-        }
-        .novel-hero .nh-info .nh-desc {
-            font-size: 14px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 20px;
-        }
-        .novel-hero .nh-info .nh-stats {
-            display: flex; justify-content: center; gap: 24px;
-            flex-wrap: wrap; margin-bottom: 20px;
-        }
-        .novel-hero .nh-info .nh-stats .stat {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-        }
-        .novel-hero .nh-info .nh-stats .stat .num { font-size: 22px; font-weight: 900; color: var(--gold); }
-        .novel-hero .nh-info .nh-stats .stat .lbl { font-size: 11px; color: var(--text-muted); font-weight: 600; }
-
-        /* READER */
-        .reader-wrap { max-width: 820px; margin: 0 auto; padding: 30px 16px 80px; }
-        .reader-topbar {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
-        }
-        .reader-back {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 18px; background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 100px; color: var(--text-secondary); font-family: inherit;
-            font-size: 13px; font-weight: 700; cursor: pointer; transition: all var(--transition);
-        }
-        .reader-back:hover { border-color: var(--gold); color: var(--gold); }
-        .reader-header {
-            text-align: center; margin-bottom: 32px;
-            padding-bottom: 24px; border-bottom: 1px solid var(--border);
-        }
-        .reader-header .r-category {
-            display: inline-block; background: rgba(245,180,0,0.1); color: var(--gold);
-            padding: 4px 14px; border-radius: 100px; font-size: 11px;
-            font-weight: 800; margin-bottom: 12px;
-        }
-        .reader-header h1 {
-            font-size: clamp(22px, 4vw, 34px); font-weight: 900;
-            color: var(--text); line-height: 1.3; margin-bottom: 10px;
-        }
-        .reader-header .r-desc {
-            font-size: 13px; color: var(--text-muted); line-height: 1.7;
-            max-width: 600px; margin: 0 auto;
-        }
-        .reader-content {
-            font-size: 17px; line-height: 2.1; color: #d8d8d8;
-            text-align: justify; white-space: pre-wrap; word-wrap: break-word;
-            padding: 8px 4px 30px;
-        }
-        .reader-footer-nav {
-            display: flex; justify-content: center; gap: 12px;
-            margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border);
-        }
-        .reader-footer-nav button {
-            padding: 14px 28px; background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius); color: var(--text-secondary); font-family: inherit;
-            font-size: 13px; font-weight: 700; cursor: pointer; transition: all var(--transition);
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .reader-footer-nav button:hover { border-color: var(--gold); color: var(--gold); background: var(--bg-hover); }
-        .reader-footer-nav button i { color: var(--gold); }
-
-        /* VIDEO MODAL */
-        .video-modal {
-            display: none; position: fixed; inset: 0; z-index: 9999;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px); align-items: center;
-            justify-content: center; padding: 20px;
-        }
-        .video-modal.active { display: flex; animation: modalFadeIn 0.3s ease; }
-        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .video-modal-inner {
-            width: 100%; max-width: 1100px; background: var(--bg-secondary);
-            border: 1px solid var(--border); border-radius: var(--radius-lg);
-            overflow: hidden; box-shadow: var(--shadow-lg);
-            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; max-height: 95vh;
-        }
-        @keyframes modalSlideIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .video-modal-header {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border);
-            background: rgba(0,0,0,0.3); flex-shrink: 0;
-        }
-        .video-modal-header .title-info {
-            display: flex; flex-direction: column; gap: 4px;
-            flex: 1; min-width: 0;
-        }
-        .video-modal-header .episode-label {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 3px 10px; background: rgba(245,180,0,0.1);
-            color: var(--gold); border-radius: 6px; font-size: 10px;
-            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            align-self: flex-start;
-        }
-        .video-modal-header .title {
-            font-size: 15px; font-weight: 800; color: var(--text);
-            line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .video-modal-close {
-            width: 38px; height: 38px; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border); border-radius: 50%;
-            color: var(--text-secondary); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all var(--transition); font-size: 16px; flex-shrink: 0;
-        }
-        .video-modal-close:hover { background: var(--gold); border-color: var(--gold); color: #0A0A0A; transform: rotate(90deg); }
-        .video-modal-body {
-            position: relative; width: 100%; background: #000;
-            flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
-        }
-        .video-modal-body .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; }
-        .video-modal-body iframe, .video-modal-body video {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border: none; display: block;
-        }
-        .video-modal-description {
-            padding: 16px 20px; border-top: 1px solid var(--border);
-            background: rgba(0,0,0,0.3); flex-shrink: 0;
-        }
-        .video-modal-description p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
-
-        /* TEAM POSTER */
-        .team-poster-section { padding: 40px 0 20px; }
-        .team-poster {
-            width: 100%; max-width: 700px; margin: 0 auto;
-            border-radius: var(--radius-lg); overflow: hidden;
-            border: 1px solid var(--border); box-shadow: var(--shadow-lg);
-            position: relative;
-        }
-        .team-poster img { width: 100%; height: auto; display: block; }
-        .team-poster::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, transparent 70%, rgba(0,0,0,0.4) 100%);
-            pointer-events: none;
-        }
-
-        /* EMPTY */
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .empty-state i { font-size: 48px; color: var(--gold); opacity: 0.4; margin-bottom: 16px; }
-        .empty-state p { font-size: 14px; }
+        .contact-content { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .contact-item { background: var(--bg-card); padding: 24px; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; border: 1px solid var(--border); transition: 0.3s; text-decoration: none; color: #fff; }
+        .contact-item:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .contact-item i { font-size: 32px; color: var(--gold); margin-bottom: 5px; }
+        .contact-item .c-label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+        .contact-item .c-value { font-weight: 800; font-size: 16px; direction: ltr; }
 
         /* FOOTER */
-        .footer {
-            margin-top: 60px; padding: 40px 0 24px;
-            background: var(--bg-secondary); border-top: 1px solid var(--border);
-        }
-        .footer-brand { text-align: center; margin-bottom: 24px; }
-        .footer-brand .logo {
-            width: 70px; height: 70px; margin: 0 auto 14px;
-            border-radius: 50%; background: var(--bg-card);
-            border: 3px solid var(--gold); box-shadow: 0 0 30px var(--gold-glow);
-            overflow: hidden; position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .footer-brand .logo img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
-        .footer-brand .name { font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 4px; }
-        .footer-brand .sub { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; }
-        .footer-links {
-            display: flex; flex-wrap: wrap; justify-content: center;
-            gap: 8px 20px; margin-bottom: 24px; padding: 0 16px;
-        }
-        .footer-links a {
-            color: var(--text-secondary); text-decoration: none; font-size: 13px;
-            font-weight: 600; padding: 6px 4px; transition: color var(--transition); cursor: pointer;
-        }
-        .footer-links a:hover { color: var(--gold); }
-        .footer-bottom {
-            padding-top: 20px; border-top: 1px solid var(--border);
-            display: flex; flex-direction: column; align-items: center;
-            gap: 8px; text-align: center; font-size: 11px; color: var(--text-muted);
-        }
-        .footer-bottom .author { color: var(--gold); font-weight: 700; }
-        .footer-bottom .dev { color: var(--text-secondary); font-weight: 600; }
-        .footer-bottom .phone { direction: ltr; color: var(--gold); font-weight: 700; }
+        .footer { margin-top: 80px; padding: 50px 0 30px; background: var(--bg-secondary); border-top: 1px solid var(--border); text-align: center; }
+        .footer-brand .logo { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; border: 3px solid var(--gold); overflow: hidden; box-shadow: 0 0 30px var(--gold-glow); }
+        .footer-brand .logo img { width: 100%; height: 100%; object-fit: cover; }
+        .footer-brand .name { font-size: 22px; font-weight: 800; color: var(--gold); margin-bottom: 6px; }
+        .footer-brand .sub { font-size: 12px; color: var(--text-muted); letter-spacing: 3px; font-weight: 700; text-transform: uppercase; }
+        .footer-bottom { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+        
+        /* VIDEO MODAL */
+        .video-modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
+        .video-modal.active { display: flex; }
+        .video-modal-inner { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
+        .video-modal-inner iframe { width: 100%; height: 100%; border: none; }
+        .video-modal-close { position: absolute; top: -50px; right: 0; width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .video-modal-close:hover { background: var(--danger); border-color: var(--danger); }
 
         /* RESPONSIVE */
         @media (min-width: 600px) {
-            .container { padding: 0 28px; }
-            .hero { padding: 80px 0 60px; }
-            .hero-buttons { flex-direction: row; max-width: 560px; gap: 16px; }
-            .btn-primary, .btn-secondary { flex: 1; padding: 16px 24px; }
-            .novels-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-            .novel-card .body h3 { font-size: 16px; }
-            .episodes-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .episode-card .body { padding: 20px; }
-            .episode-card .body h3 { font-size: 17px; }
-            .footer-bottom {
-                flex-direction: row; justify-content: space-between;
-                text-align: right; padding: 20px 0 0;
-            }
-            .contact-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-buttons { flex-direction: row; max-width: 600px; }
+            .btn-primary, .btn-secondary { flex: 1; }
+            .novels-grid { grid-template-columns: repeat(3, 1fr); }
+            .episodes-grid { grid-template-columns: repeat(2, 1fr); }
             .team-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (min-width: 900px) {
-            .header-inner { padding: 16px 0; }
-            .menu-btn, .header-spacer { width: 46px; height: 46px; }
-            .header-brand .logo { width: 50px; height: 50px; }
-            .header-brand .brand-text .name { font-size: 19px; }
-            .header-brand .brand-text .tag { font-size: 10px; }
-            .hero { padding: 100px 0 80px; }
-            .section { padding: 80px 0 60px; }
-            .novels-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .novel-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
-            .novel-card:hover .cover img { transform: scale(1.05); }
-            .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
-            .episodes-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .episode-card:hover { transform: translateY(-6px); border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
-            .episode-card:hover .thumb img { transform: scale(1.05); }
-            .episode-card:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); }
-            .novel-hero { flex-direction: row; align-items: flex-start; }
+            .novels-grid { grid-template-columns: repeat(4, 1fr); }
+            .episodes-grid { grid-template-columns: repeat(3, 1fr); }
+            .team-grid { grid-template-columns: repeat(4, 1fr); }
+            .novel-hero { flex-direction: row; align-items: center; text-align: right; padding: 40px; }
             .novel-hero .nh-cover { margin: 0; }
-            .novel-hero .nh-info { text-align: right; }
+            .novel-hero .nh-info { text-align: right; padding-right: 30px; }
             .novel-hero .nh-info .nh-stats { justify-content: flex-start; }
-            .reader-content { font-size: 18px; }
-        }
-        @media (min-width: 1200px) { .hero { padding: 120px 0 100px; } }
-        @media (max-width: 479px) {
-            .container { padding: 0 16px; }
-            .header-inner { padding: 10px 0; min-height: 62px; gap: 10px; }
-            .menu-btn, .header-spacer { width: 38px; height: 38px; }
-            .header-brand .logo { width: 40px; height: 40px; }
-            .header-brand .brand-text .name { font-size: 15px; }
-            .header-brand .brand-text .tag { font-size: 8px; letter-spacing: 2px; }
-            .hero { padding: 40px 0 30px; }
-            .hero-badge { font-size: 11px; padding: 6px 14px; margin-bottom: 18px; }
-            .hero h1 { font-size: 28px; }
-            .hero p { font-size: 13px; margin: 16px auto 24px; }
-            .hero-buttons { gap: 10px; }
-            .btn-primary, .btn-secondary { padding: 14px 22px; font-size: 14px; }
-            .section { padding: 40px 0 30px; }
-            .section-header { margin-bottom: 20px; gap: 10px; }
-            .section-header .title-icon { width: 36px; height: 36px; font-size: 15px; }
-            .section-header h2 { font-size: 20px; }
-            .section-header .view-all { font-size: 12px; padding: 6px 12px; }
-            .novels-grid { gap: 12px; }
-            .novel-card .body { padding: 12px 10px; gap: 6px; }
-            .novel-card .body h3 { font-size: 13px; }
-            .novel-card .body .meta { font-size: 10px; gap: 8px; }
-            .novel-card .cover .category-tag { font-size: 9px; padding: 3px 10px; top: 8px; right: 8px; }
-            .episodes-grid { gap: 16px; }
-            .episode-card .body { padding: 14px; gap: 8px; }
-            .episode-card .body h3 { font-size: 14px; }
-            .episode-card .body .description { font-size: 12px; }
-            .episode-card .thumb .play-btn { width: 56px; height: 56px; font-size: 20px; }
-            .video-modal { padding: 10px; }
-            .video-modal-header { padding: 10px 14px; }
-            .video-modal-header .title { font-size: 13px; }
-            .video-modal-close { width: 34px; height: 34px; font-size: 14px; }
-            .video-modal-description { padding: 12px 14px; }
-            .video-modal-description p { font-size: 12px; }
-            .footer { margin-top: 40px; padding: 30px 0 20px; }
-            .footer-brand .logo { width: 60px; height: 60px; }
-            .footer-brand .name { font-size: 16px; }
-            .footer-links { gap: 6px 16px; margin-bottom: 18px; }
-            .footer-links a { font-size: 12px; }
-            .page-header { padding: 36px 0 24px; }
-            .page-header .page-icon { width: 56px; height: 56px; font-size: 22px; margin-bottom: 14px; }
-            .about-block { padding: 20px; }
-            .contact-form { padding: 20px; }
-            .novel-details { padding: 24px 16px; }
-            .reader-wrap { padding: 20px 14px 60px; }
-            .reader-content { font-size: 15.5px; line-height: 2; }
-        }
-        @media (max-width: 374px) {
-            .container { padding: 0 12px; }
-            .header-inner { padding: 8px 0; min-height: 56px; gap: 8px; }
-            .menu-btn, .header-spacer { width: 36px; height: 36px; font-size: 18px; }
-            .header-brand .logo { width: 36px; height: 36px; }
-            .header-brand .brand-text .name { font-size: 14px; }
-            .header-brand .brand-text .tag { font-size: 7px; letter-spacing: 1.5px; }
-            .hero { padding: 32px 0 24px; }
-            .hero h1 { font-size: 24px; }
-            .hero p { font-size: 12px; }
-            .novel-card .body h3 { font-size: 12px; }
-            .episode-card .body h3 { font-size: 13px; }
-            .episode-card .body .description { font-size: 11px; }
-            .reader-content { font-size: 15px; }
-        }
-        @media (hover: none) and (pointer: coarse) {
-            .novel-card:hover { transform: none; box-shadow: none; }
-            .novel-card:hover .cover img { transform: none; }
-            .btn-primary:hover, .btn-secondary:hover { transform: none; }
-            .episode-card:hover { transform: none; box-shadow: none; }
-            .episode-card:hover .thumb img { transform: none; }
-            .episode-card:hover .play-btn { transform: translate(-50%, -50%); }
-            .sidebar-nav a:hover { background: transparent; color: var(--text-secondary); border-right-color: transparent; }
-            .sidebar-nav a.active { background: var(--bg-hover); color: var(--gold); border-right-color: var(--gold); }
+            .reader-content { font-size: 20px; line-height: 2.3; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- شاشة التحميل -->
+    <div id="preloader">
+        <div class="spinner"></div>
+        <p>عدسة الروايات</p>
+    </div>
+
     <header class="header">
         <div class="container">
             <div class="header-inner">
-                <button class="menu-btn" id="menuBtn" aria-label="القائمة">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
                 <a class="header-brand" onclick="navigate('home')">
                     <div class="logo">
-                        <img id="headerLogoImg" src="logo.jpeg" alt="Logo" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-eye\' style=\'color:var(--gold);\'></i>';" />
+                        <img id="headerLogoImg" src="logo.jpeg" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='" />
                     </div>
                     <div class="brand-text">
                         <span class="name" id="headerSiteName">عدسة الروايات</span>
@@ -759,109 +288,67 @@
         </div>
     </header>
 
-    <!-- SIDEBAR -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo-mini">
-                <div class="icon">
-                    <img id="sidebarLogoImg" src="logo.jpeg" alt="Logo" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-eye\' style=\'color:var(--gold);\'></i>';" />
-                </div>
-                <div class="text">
-                    <span class="name" id="sidebarSiteName">عدسة الروايات</span>
-                    <span class="sub" id="sidebarSiteTag">LENS OF NOVELS</span>
-                </div>
+                <div class="icon"><img id="sidebarLogoImg" src="logo.jpeg" /></div>
+                <div class="text"><span class="name" id="sidebarSiteName">عدسة الروايات</span><span class="sub">LENS OF NOVELS</span></div>
             </div>
-            <button class="sidebar-close" id="sidebarClose" aria-label="إغلاق">
-                <i class="fas fa-times"></i>
-            </button>
+            <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
         </div>
         <nav class="sidebar-nav">
-            <a data-nav="home" class="active"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a>
+            <a data-nav="home" class="active"><i class="fas fa-home"></i><span>الرئيسية</span></a>
             <a data-nav="novels"><i class="fas fa-book"></i><span>الروايات</span></a>
-            <a data-nav="episodes"><i class="fas fa-film"></i><span>الحلقات والفيديوهات</span></a>
-            <a data-nav="announcements"><i class="fas fa-bullhorn"></i><span>الإعلانات</span></a>
+            <a data-nav="episodes"><i class="fas fa-film"></i><span>الحلقات</span></a>
             <a data-nav="about"><i class="fas fa-users"></i><span>عن الفريق</span></a>
             <a data-nav="contact"><i class="fas fa-envelope"></i><span>تواصل معنا</span></a>
         </nav>
         <div class="sidebar-footer">
-            <div>جميع الحقوق محفوظة &copy; 2026</div>
+            <div>حقوق النشر &copy; 2026</div>
             <div class="dev" id="sidebarDev">بهاء الدين الحسين</div>
-            <div style="direction: ltr;" id="sidebarPhone">0982520358</div>
         </div>
     </aside>
 
-    <!-- ==================== HOME ==================== -->
+    <!-- HOME PAGE -->
     <div class="page active" id="page-home">
         <section class="hero">
             <div class="container">
-                <div class="hero-badge">
-                    <i class="fas fa-star"></i>
-                    <span id="heroBadgeText">عالم الإبداع القصصي والإنتاج السينمائي</span>
-                </div>
-                <h1>
-                    <span id="heroTitle1">مرحباً بكم في عالم</span>
-                    <span class="gold" id="heroTitle2">عدسة الروايات</span>
-                </h1>
-                <p id="heroDescText">
-                    تأخذكم في رحلات بصرية وسماعية استثنائية عبر أعماق الروايات والقصص،
-                    نقل السطور المكتوبة إلى مشاهد حية وحلقات تشويقية بأسلوب سينمائي مبتكر.
-                </p>
+                <div class="hero-badge"><i class="fas fa-star"></i><span id="heroBadgeText">عالم الإبداع القصصي والإنتاج السينمائي</span></div>
+                <h1><span id="heroTitle1">مرحباً بكم في عالم</span><span class="gold" id="heroTitle2">عدسة الروايات</span></h1>
+                <p id="heroDescText">تأخذكم في رحلات بصرية وسماعية استثنائية عبر أعماق الروايات والقصص، نقل السطور المكتوبة إلى مشاهد حية وحلقات تشويقية بأسلوب سينمائي مبتكر.</p>
                 <div class="hero-buttons">
-                    <a class="btn-primary" onclick="navigate('episodes')">
-                        <i class="fas fa-play"></i><span>شاهد أحدث الحلقات</span>
-                    </a>
-                    <a class="btn-secondary" onclick="navigate('novels')">
-                        <i class="fas fa-book-open"></i><span>استكشف الروايات</span>
-                    </a>
+                    <a class="btn-primary" onclick="navigate('episodes')"><i class="fas fa-play"></i> شاهد أحدث الحلقات</a>
+                    <a class="btn-secondary" onclick="navigate('novels')"><i class="fas fa-book-open"></i> استكشف الروايات</a>
                 </div>
             </div>
         </section>
-
+        
         <section class="section">
             <div class="container">
                 <div class="section-header">
-                    <div class="title-group">
-                        <div class="title-icon"><i class="fas fa-book"></i></div>
-                        <h2>الروايات المميزة</h2>
-                    </div>
-                    <a class="view-all" onclick="navigate('novels')">
-                        <span>عرض الكل</span><i class="fas fa-arrow-left"></i>
-                    </a>
+                    <div class="title-group"><div class="title-icon"><i class="fas fa-book"></i></div><h2>الروايات المميزة</h2></div>
+                    <a class="view-all" onclick="navigate('novels')">عرض الكل <i class="fas fa-arrow-left"></i></a>
                 </div>
                 <div class="novels-grid" id="homeNovelsGrid"></div>
             </div>
         </section>
-
+        
         <section class="section">
             <div class="container">
                 <div class="section-header">
-                    <div class="title-group">
-                        <div class="title-icon"><i class="fas fa-film"></i></div>
-                        <h2>أحدث الحلقات</h2>
-                    </div>
-                    <a class="view-all" onclick="navigate('episodes')">
-                        <span>عرض الكل</span><i class="fas fa-arrow-left"></i>
-                    </a>
+                    <div class="title-group"><div class="title-icon"><i class="fas fa-film"></i></div><h2>أحدث الحلقات</h2></div>
+                    <a class="view-all" onclick="navigate('episodes')">عرض الكل <i class="fas fa-arrow-left"></i></a>
                 </div>
                 <div class="episodes-grid" id="homeEpisodesGrid"></div>
             </div>
         </section>
-
-        <section class="team-poster-section">
-            <div class="container">
-                <div class="team-poster">
-                    <img id="teamPosterImg" src="logo.jpeg" alt="فريق عدسة الروايات" onerror="this.style.display='none'" />
-                </div>
-            </div>
-        </section>
     </div>
 
-    <!-- ==================== NOVELS ==================== -->
+    <!-- NOVELS PAGE -->
     <div class="page" id="page-novels">
         <div class="page-header">
             <div class="container">
-                <div class="page-icon"><i class="fas fa-book"></i></div>
                 <h1>الروايات</h1>
                 <p>مجموعة من الروايات العربية المميزة التي نعمل على تحويلها إلى تجارب بصرية وسماعية فريدة.</p>
             </div>
@@ -873,21 +360,21 @@
         </section>
     </div>
 
-    <!-- ==================== NOVEL DETAILS ==================== -->
+    <!-- NOVEL DETAILS -->
     <div class="page" id="page-novel-details">
         <div class="novel-details" id="novelDetailsContent"></div>
     </div>
 
-    <!-- ==================== READER ==================== -->
+    <!-- READER -->
     <div class="page" id="page-reader">
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
         <div class="reader-wrap" id="readerContent"></div>
     </div>
 
-    <!-- ==================== EPISODES ==================== -->
+    <!-- EPISODES PAGE -->
     <div class="page" id="page-episodes">
         <div class="page-header">
             <div class="container">
-                <div class="page-icon"><i class="fas fa-film"></i></div>
                 <h1>الحلقات والفيديوهات</h1>
                 <p>شاهد أحدث الحلقات والفيديوهات التي تقدمها عدسة الروايات بأسلوب سينمائي مبتكر.</p>
             </div>
@@ -899,143 +386,74 @@
         </section>
     </div>
 
-    <!-- ==================== ANNOUNCEMENTS ==================== -->
-    <div class="page" id="page-announcements">
-        <div class="page-header">
-            <div class="container">
-                <div class="page-icon"><i class="fas fa-bullhorn"></i></div>
-                <h1>الإعلانات</h1>
-                <p>تابع آخر أخبار وإعلانات فريق عدسة الروايات.</p>
-            </div>
-        </div>
-        <section class="section">
-            <div class="container">
-                <div class="announcements-list" id="announcementsList"></div>
-            </div>
-        </section>
-    </div>
-
-    <!-- ==================== ABOUT ==================== -->
+    <!-- ABOUT PAGE -->
     <div class="page" id="page-about">
         <div class="page-header">
             <div class="container">
-                <div class="page-icon"><i class="fas fa-users"></i></div>
                 <h1>عن الفريق</h1>
                 <p>تعرف على فريق عدسة الروايات، رسالتنا، ورؤيتنا.</p>
             </div>
         </div>
         <section class="section">
-            <div class="container">
-                <div class="about-content">
-                    <div class="about-block">
-                        <h2><i class="fas fa-eye"></i> من نحن</h2>
-                        <p id="aboutWhoText">عدسة الروايات هو فريق إبداعي متخصص في تحويل الروايات والقصص المكتوبة إلى محتوى مرئي وسماعي بأسلوب سينمائي مبتكر.</p>
-                    </div>
-                    <div class="about-block">
-                        <h2><i class="fas fa-bullseye"></i> رسالتنا</h2>
-                        <p id="aboutMissionText">تقديم محتوى قصصي عربي أصيل بجودة عالية، وإعادة إحياء الروايات في قوالب بصرية وسماعية حديثة تلامس المشاعر وتترك أثراً لدى الجمهور.</p>
-                    </div>
-                    <div class="about-block">
-                        <h2><i class="fas fa-binoculars"></i> رؤيتنا</h2>
-                        <p id="aboutVisionText">أن نكون الوجهة الأولى لعشاق الروايات العربية في العالم الرقمي، وأن نقدم تجربة سينمائية فريدة تجمع بين عمق النص وجمال الصورة.</p>
-                    </div>
-                    <div class="about-block">
-                        <h2><i class="fas fa-users"></i> فريق العمل</h2>
-                        <div class="team-grid" id="teamGridAbout"></div>
-                    </div>
+            <div class="about-content">
+                <div class="about-block">
+                    <h2><i class="fas fa-eye"></i> من نحن</h2>
+                    <p id="aboutWhoText">عدسة الروايات هو فريق إبداعي متخصص في تحويل الروايات والقصص المكتوبة إلى محتوى مرئي وسماعي بأسلوب سينمائي مبتكر.</p>
+                </div>
+                <div class="about-block">
+                    <h2><i class="fas fa-bullseye"></i> رسالتنا</h2>
+                    <p id="aboutMissionText">تقديم محتوى قصصي عربي أصيل بجودة عالية، وإعادة إحياء الروايات في قوالب بصرية وسماعية حديثة تلامس المشاعر وتترك أثراً لدى الجمهور.</p>
+                </div>
+                <div class="about-block">
+                    <h2><i class="fas fa-binoculars"></i> رؤيتنا</h2>
+                    <p id="aboutVisionText">أن نكون الوجهة الأولى لعشاق الروايات العربية في العالم الرقمي، وأن نقدم تجربة سينمائية فريدة تجمع بين عمق النص وجمال الصورة.</p>
+                </div>
+                <div class="about-block">
+                    <h2><i class="fas fa-users"></i> فريق العمل</h2>
+                    <div class="team-grid" id="teamGridAbout"></div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- ==================== CONTACT ==================== -->
+    <!-- CONTACT PAGE -->
     <div class="page" id="page-contact">
         <div class="page-header">
             <div class="container">
-                <div class="page-icon"><i class="fas fa-envelope"></i></div>
                 <h1>تواصل معنا</h1>
                 <p>نحن هنا للإجابة على استفساراتكم واستقبال اقتراحاتكم.</p>
             </div>
         </div>
         <section class="section">
-            <div class="container">
-                <div class="contact-content">
-                    <div class="contact-grid" id="contactGrid"></div>
-                    <form class="contact-form" onsubmit="handleContactSubmit(event)">
-                        <h3><i class="fas fa-paper-plane"></i> أرسل لنا رسالة</h3>
-                        <div class="form-group">
-                            <label for="cName">الاسم</label>
-                            <input type="text" id="cName" placeholder="أدخل اسمك" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="cEmail">البريد الإلكتروني</label>
-                            <input type="email" id="cEmail" placeholder="example@email.com" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="cMessage">الرسالة</label>
-                            <textarea id="cMessage" placeholder="اكتب رسالتك هنا..." required></textarea>
-                        </div>
-                        <button type="submit" class="form-submit">
-                            <i class="fas fa-paper-plane"></i><span>إرسال الرسالة</span>
-                        </button>
-                    </form>
-                </div>
+            <div class="contact-content">
+                <div class="contact-grid" id="contactGrid"></div>
             </div>
         </section>
     </div>
 
-    <!-- VIDEO MODAL -->
-    <div class="video-modal" id="videoModal">
-        <div class="video-modal-inner">
-            <div class="video-modal-header">
-                <div class="title-info">
-                    <span class="episode-label" id="modalEpisodeLabel">
-                        <i class="fas fa-circle"></i><span>الحلقة</span>
-                    </span>
-                    <span class="title" id="modalTitle">عنوان الحلقة</span>
-                </div>
-                <button class="video-modal-close" id="modalClose" aria-label="إغلاق">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="video-modal-body">
-                <div class="video-wrapper" id="videoWrapper"></div>
-            </div>
-            <div class="video-modal-description" id="modalDescription"><p></p></div>
+    <div class="video-modal" id="videoModal" onclick="if(event.target===this)closeVideo()">
+        <div style="position:relative; width:100%; max-width:1000px;">
+            <button class="video-modal-close" onclick="closeVideo()"><i class="fas fa-times"></i></button>
+            <div class="video-modal-inner" id="videoWrapper"></div>
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-brand">
-                <div class="logo">
-                    <img id="footerLogoImg" src="logo.jpeg" alt="Logo" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-eye\' style=\'color:var(--gold);font-size:28px;\'></i>';" />
-                </div>
+                <div class="logo"><img id="footerLogoImg" src="logo.jpeg" /></div>
                 <div class="name" id="footerSiteName">عدسة الروايات</div>
-                <div class="sub" id="footerSiteTag">LENS OF NOVELS</div>
-            </div>
-            <div class="footer-links">
-                <a onclick="navigate('home')">الرئيسية</a>
-                <a onclick="navigate('novels')">الروايات</a>
-                <a onclick="navigate('episodes')">الحلقات</a>
-                <a onclick="navigate('announcements')">الإعلانات</a>
-                <a onclick="navigate('about')">عن الفريق</a>
-                <a onclick="navigate('contact')">تواصل معنا</a>
+                <div class="sub">LENS OF NOVELS</div>
             </div>
             <div class="footer-bottom">
-                <div>❤️ جميع الحقوق محفوظة &copy; 2026 <span class="author" id="footerAuthorName">عدسة الروايات</span></div>
-                <div>🔧 برمجة وتطوير: <span class="dev" id="footerDevName">بهاء الدين الحسين</span> | <span class="phone" id="footerPhone">0982520358</span></div>
+                جميع الحقوق محفوظة &copy; 2026 | صمم وطور بواسطة <span id="footerDevName" style="color:var(--gold);font-weight:700;">بهاء الدين الحسين</span>
             </div>
         </div>
     </footer>
 
     <script type="module">
-        /* ============================================================
-           FIREBASE SETUP & DATA FETCHING
-           ============================================================ */
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCAKkjqWQ3cNFUxocfdrehiUI6VJTYVu-c",
@@ -1049,265 +467,112 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // المتغيرات العامة
         let novels = [];
         let episodes = [];
         let team = [];
-        let contact = {};
-        let announcements = [];
         let site = {};
-        let about = {};
-
         let currentReader = { novelId: null };
 
-        // المتغيرات الافتراضية (في حال كانت قاعدة البيانات فارغة)
-        const defaultNovels = [];
-        const defaultEpisodes = [];
-        const defaultTeam = [
-            {name:'بهاء الدين الحسين',role:'البرمجة والتطوير',icon:'fa-code'},
-            {name:'شادي رحال',role:'الكتابة',icon:'fa-pen-fancy'},
-            {name:'عائشة و دهب',role:'الإعلام',icon:'fa-bullhorn'},
-            {name:'المجاهد',role:'التصوير والمونتاج',icon:'fa-camera'}
-        ];
-        const defaultContact = { phone:'0982520358', whatsapp:'+963982520358', email:'info@lensofnovels.com', dev:'بهاء الدين الحسين' };
-        const defaultAnnouncements = [];
-        const defaultSite = {
-            name: 'عدسة الروايات',
-            tag: 'LENS OF NOVELS',
-            heroBadge: 'عالم الإبداع القصصي والإنتاج السينمائي',
-            heroTitle1: 'مرحباً بكم في عالم',
-            heroTitle2: 'عدسة الروايات',
-            heroDesc: 'تأخذكم في رحلات بصرية وسماعية استثنائية عبر أعماق الروايات والقصص، نقل السطور المكتوبة إلى مشاهد حية وحلقات تشويقية بأسلوب سينمائي مبتكر.',
-            logo: ''
-        };
-        const defaultAbout = {
-            who: 'عدسة الروايات هو فريق إبداعي متخصص في تحويل الروايات والقصص المكتوبة إلى محتوى مرئي وسماعي بأسلوب سينمائي مبتكر. نؤمن بأن الكلمة المكتوبة قادرة على أن تصبح مشهداً حياً ينبض بالحياة، ونعمل على تحقيق ذلك من خلال مزيج من السرد القصصي والإنتاج البصري.',
-            mission: 'تقديم محتوى قصصي عربي أصيل بجودة عالية، وإعادة إحياء الروايات في قوالب بصرية وسماعية حديثة تلامس المشاعر وتترك أثراً لدى الجمهور.',
-            vision: 'أن نكون الوجهة الأولى لعشاق الروايات العربية في العالم الرقمي، وأن نقدم تجربة سينمائية فريدة تجمع بين عمق النص وجمال الصورة.'
-        };
-
-        // دالة لجلب كل البيانات من Firebase
-        async function fetchDataFromFirebase() {
+        /* ============================================================
+           تحميل البيانات
+           ============================================================ */
+        async function loadAllData() {
             try {
-                // 1. الإعدادات
+                // جلب الإعدادات
                 const setSnap = await getDoc(doc(db, "settings", "site"));
-                site = setSnap.exists() ? setSnap.data() : defaultSite;
-                contact = setSnap.exists() ? setSnap.data() : defaultContact; // افترض أن التواصل في نفس المستند
+                if (setSnap.exists()) { site = setSnap.data(); }
 
-                // 2. الروايات
+                // جلب الروايات
                 const nSnap = await getDocs(collection(db, "novels"));
                 novels = [];
                 nSnap.forEach(d => novels.push({ id: d.id, ...d.data() }));
 
-                // 3. الفيديوهات
+                // جلب الفيديوهات
                 const eSnap = await getDocs(collection(db, "episodes"));
                 episodes = [];
                 eSnap.forEach(d => episodes.push({ id: d.id, ...d.data() }));
 
-                // 4. الفريق
+                // جلب الفريق
                 const tSnap = await getDocs(collection(db, "team"));
                 team = [];
                 tSnap.forEach(d => team.push({ id: d.id, ...d.data() }));
 
-                // 5. الإعلانات
-                const annSnap = await getDocs(collection(db, "announcements"));
-                announcements = [];
-                annSnap.forEach(d => announcements.push({ id: d.id, ...d.data() }));
-                if (announcements.length === 0) announcements = defaultAnnouncements;
-
-                // 6. About (إذا كان مخزناً في نفس مستند الإعدادات)
-                about = setSnap.exists() ? setSnap.data() : defaultAbout;
-
-                // تحديث الواجهة
-                applySiteSettings();
+                applySettings();
                 renderAll();
-            } catch (e) {
-                console.error("Error fetching data from Firebase:", e);
-                // في حال فشل الاتصال، اعرض البيانات الافتراضية
-                novels = defaultNovels;
-                episodes = defaultEpisodes;
-                team = defaultTeam;
-                contact = defaultContact;
-                site = defaultSite;
-                about = defaultAbout;
-                announcements = defaultAnnouncements;
-                applySiteSettings();
-                renderAll();
+                document.body.classList.add('loaded');
+
+            } catch (error) {
+                console.error("Error loading data:", error);
+                document.getElementById('preloader').innerHTML = '<p style="color:var(--danger);">حدث خطأ في الاتصال. تأكد من اتصالك بالإنترنت.</p>';
             }
         }
 
         /* ============================================================
-           APPLY SITE SETTINGS (نفس الكود السابق)
+           تطبيق الإعدادات
            ============================================================ */
-        function applySiteSettings() {
+        function applySettings() {
             const name = site.name || 'عدسة الروايات';
-            const tag = site.tag || 'LENS OF NOVELS';
-
             document.getElementById('headerSiteName').textContent = name;
-            document.getElementById('headerSiteTag').textContent = tag;
             document.getElementById('sidebarSiteName').textContent = name;
-            document.getElementById('sidebarSiteTag').textContent = tag;
             document.getElementById('footerSiteName').textContent = name;
-            document.getElementById('footerSiteTag').textContent = tag;
-            document.getElementById('footerAuthorName').textContent = name;
+            
+            document.getElementById('heroBadgeText').textContent = site.heroBadge || 'عالم الإبداع القصصي والإنتاج السينمائي';
+            document.getElementById('heroTitle1').textContent = site.heroTitle1 || 'مرحباً بكم في عالم';
+            document.getElementById('heroTitle2').textContent = site.heroTitle2 || 'عدسة الروايات';
+            document.getElementById('heroDescText').textContent = site.heroDesc || 'تأخذكم في رحلات بصرية وسماعية استثنائية.';
+            
+            document.getElementById('sidebarDev').textContent = site.dev || 'بهاء الدين الحسين';
+            document.getElementById('footerDevName').textContent = site.dev || 'بهاء الدين الحسين';
 
-            document.getElementById('heroBadgeText').textContent = site.heroBadge || '';
-            document.getElementById('heroTitle1').textContent = site.heroTitle1 || '';
-            document.getElementById('heroTitle2').textContent = site.heroTitle2 || '';
-            document.getElementById('heroDescText').textContent = site.heroDesc || '';
+            if (site.aboutWho) document.getElementById('aboutWhoText').textContent = site.aboutWho;
+            if (site.aboutMission) document.getElementById('aboutMissionText').textContent = site.aboutMission;
+            if (site.aboutVision) document.getElementById('aboutVisionText').textContent = site.aboutVision;
 
-            document.title = name + ' - LENS OF NOVELS';
-
-            const logoUrl = site.logo || 'logo.jpeg';
-            ['headerLogoImg','sidebarLogoImg','footerLogoImg','teamPosterImg'].forEach(id => {
-                const img = document.getElementById(id);
-                if (img) { img.src = logoUrl; img.style.display = 'block'; }
-            });
-
-            document.getElementById('sidebarDev').textContent = contact.dev || '';
-            document.getElementById('sidebarPhone').textContent = contact.phone || '';
-            document.getElementById('footerDevName').textContent = contact.dev || '';
-            document.getElementById('footerPhone').textContent = contact.phone || '';
-
-            document.getElementById('aboutWhoText').textContent = about.who || '';
-            document.getElementById('aboutMissionText').textContent = about.mission || '';
-            document.getElementById('aboutVisionText').textContent = about.vision || '';
+            // الشعار
+            if (site.logo) {
+                document.getElementById('headerLogoImg').src = site.logo;
+                document.getElementById('sidebarLogoImg').src = site.logo;
+                document.getElementById('footerLogoImg').src = site.logo;
+                document.querySelectorAll('.header-brand .logo, .footer-brand .logo').forEach(el => {
+                    el.style.borderColor = 'var(--gold)';
+                });
+            }
         }
 
         /* ============================================================
-           NAVIGATION & UI (نفس الكود السابق)
+           التنقل
            ============================================================ */
-        const allPages = ['home', 'novels', 'episodes', 'announcements', 'about', 'contact', 'novel-details', 'reader'];
+        const allPages = ['home', 'novels', 'episodes', 'about', 'contact', 'novel-details', 'reader'];
         window.navigate = function(pageId) {
-            allPages.forEach(p => {
-                const el = document.getElementById('page-' + p);
-                if (el) el.classList.remove('active');
-            });
-            const target = document.getElementById('page-' + pageId);
-            if (target) target.classList.add('active');
-            document.querySelectorAll('.sidebar-nav a').forEach(a => {
-                a.classList.toggle('active', a.dataset.nav === pageId);
-            });
+            allPages.forEach(p => document.getElementById('page-' + p).classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.nav === pageId));
             closeSidebar();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         /* ============================================================
-           NOVELS & READER
-           ============================================================ */
-        window.openNovel = function(novelId) {
-            const novel = novels.find(n => n.id === novelId);
-            if (!novel) return;
-
-            const content = document.getElementById('novelDetailsContent');
-            const coverHTML = novel.image
-                ? `<img src="${novel.image}" alt="${novel.title}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-book\\' style=\\'color:var(--gold);\\'></i>'" />`
-                : `<div class="cover-placeholder"><i class="fas fa-book"></i></div>`;
-
-            const charCount = (novel.fullText || '').length;
-            const wordCount = (novel.fullText || '').trim().split(/\s+/).filter(w => w).length;
-            const readTime = Math.max(1, Math.round(wordCount / 200));
-
-            content.innerHTML = `
-                <div class="novel-hero">
-                    <div class="nh-cover">${coverHTML}</div>
-                    <div class="nh-info">
-                        <span class="nh-category">${novel.category || 'عام'}</span>
-                        <h1>${novel.title}</h1>
-                        <p class="nh-desc">${novel.description || ''}</p>
-                        <div class="nh-stats">
-                            <div class="stat">
-                                <span class="num">${charCount.toLocaleString('ar-EG')}</span>
-                                <span class="lbl">حرف</span>
-                            </div>
-                            <div class="stat">
-                                <span class="num">${wordCount.toLocaleString('ar-EG')}</span>
-                                <span class="lbl">كلمة</span>
-                            </div>
-                            <div class="stat">
-                                <span class="num">${readTime}</span>
-                                <span class="lbl">دقيقة قراءة</span>
-                            </div>
-                        </div>
-                        <a class="btn-primary" onclick="openReader('${novel.id}')" style="display:inline-flex;max-width:280px;margin:0 auto 12px;">
-                            <i class="fas fa-book-open"></i>
-                            <span>ابدأ القراءة</span>
-                        </a>
-                        <a class="btn-secondary" onclick="navigate('novels')" style="display:inline-flex;max-width:220px;margin:0 auto;">
-                            <i class="fas fa-arrow-right"></i>
-                            <span>عودة للروايات</span>
-                        </a>
-                    </div>
-                </div>
-            `;
-            navigate('novel-details');
-        }
-
-        window.openReader = function(novelId) {
-            const novel = novels.find(n => n.id === novelId);
-            if (!novel) return;
-            currentReader = { novelId };
-            renderReader();
-            navigate('reader');
-        }
-
-        function renderReader() {
-            const novel = novels.find(n => n.id === currentReader.novelId);
-            if (!novel) return;
-
-            const text = novel.fullText || 'لا يوجد محتوى لهذه الرواية.';
-            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).map(p => `<p>${escapeHtml(p.trim()).replace(/\n/g, '<br>')}</p>`).join('');
-
-            const content = `
-                <div class="reader-topbar">
-                    <button class="reader-back" onclick="backToNovelDetails()">
-                        <i class="fas fa-arrow-right"></i>
-                        <span>العودة للرواية</span>
-                    </button>
-                </div>
-                <div class="reader-header">
-                    <div class="r-category">${novel.category || 'عام'}</div>
-                    <h1>${novel.title}</h1>
-                    <p class="r-desc">${novel.description || ''}</p>
-                </div>
-                <div class="reader-content">${paragraphs}</div>
-                <div class="reader-footer-nav">
-                    <button onclick="backToNovelDetails()">
-                        <i class="fas fa-arrow-right"></i>
-                        <span>العودة للرواية</span>
-                    </button>
-                </div>
-            `;
-            document.getElementById('readerContent').innerHTML = content;
-        }
-
-        window.backToNovelDetails = function() {
-            openNovel(currentReader.novelId);
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        /* ============================================================
-           RENDER CARDS & LISTS
+           بناء البطاقات
            ============================================================ */
         function novelCardHTML(n) {
-            const coverHTML = n.image
-                ? `<img src="${n.image}" alt="غلاف ${n.title}" loading="lazy" onerror="this.style.display='none'" />`
-                : `<div class="cover-placeholder"><i class="fas fa-book"></i></div>`;
-            const words = (n.fullText || '').trim().split(/\s+/).filter(w => w).length;
+            const img = n.image ? `<img src="${n.image}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:50px;opacity:0.2;"><i class="fas fa-book"></i></div>`;
+            const words = (n.fullText || '').trim().split(/\s+/).length;
+            
+            const savedProgress = localStorage.getItem(`progress_${n.id}`);
+            const progressLabel = savedProgress ? `<span style="color:var(--success);display:flex;align-items:center;gap:4px;"><i class="fas fa-bookmark"></i> مستمر</span>` : '';
+
             return `
                 <div class="novel-card" onclick="openNovel('${n.id}')">
                     <div class="cover">
-                        ${coverHTML}
+                        ${img}
                         <span class="category-tag">${n.category || 'عام'}</span>
+                        <span class="views-tag"><i class="fas fa-eye"></i> ${n.views || 0}</span>
                     </div>
                     <div class="body">
                         <h3>${n.title}</h3>
                         <div class="meta">
-                            <span><i class="fas fa-align-right"></i> ${words.toLocaleString('ar-EG')} كلمة</span>
-                            <span><i class="fas fa-tag"></i> ${n.category || 'عام'}</span>
+                            <span><i class="fas fa-align-right"></i> ${words} كلمة</span>
+                            ${progressLabel}
                         </div>
                     </div>
                 </div>
@@ -1315,196 +580,171 @@
         }
 
         function episodeCardHTML(ep) {
-            const thumbHTML = ep.image
-                ? `<img src="${ep.image}" alt="${ep.title}" loading="lazy" onerror="this.style.display='none'" />`
-                : `<div class="thumb-placeholder"><i class="fas fa-film"></i></div>`;
+            const img = ep.image ? `<img src="${ep.image}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:60px;opacity:0.2;"><i class="fas fa-film"></i></div>`;
             return `
-                <div class="episode-card" data-id="${ep.id}" role="button" tabindex="0" onclick="openVideo('${ep.id}')">
+                <div class="episode-card" onclick="openVideo('${ep.id}')">
                     <div class="thumb">
-                        ${thumbHTML}
-                        <span class="category-badge">${ep.novel || ''}</span>
+                        ${img}
                         <div class="play-btn"><i class="fas fa-play"></i></div>
-                        <span class="duration">${ep.duration || '00:00'}</span>
                     </div>
                     <div class="body">
-                        <div class="episode-num">
-                            <i class="fas fa-circle"></i>
-                            <span>الحلقة ${ep.episodeNum || 1}</span>
-                        </div>
                         <h3>${ep.title}</h3>
-                        <p class="description">${ep.description || ''}</p>
-                        <div class="meta">
-                            <span><i class="fas fa-calendar"></i> ${ep.date || ''}</span>
-                            <span><i class="fas fa-clock"></i> ${ep.duration || '00:00'}</span>
-                        </div>
+                        <div class="desc">${ep.description || 'شاهد الحلقة الآن'}</div>
                     </div>
                 </div>
             `;
         }
 
         function renderAll() {
-            const homeNovelsEl = document.getElementById('homeNovelsGrid');
-            const homeEpisodesEl = document.getElementById('homeEpisodesGrid');
-            const allNovelsEl = document.getElementById('allNovelsGrid');
-            const allEpisodesEl = document.getElementById('allEpisodesGrid');
+            document.getElementById('homeNovelsGrid').innerHTML = novels.slice(0, 4).map(n => novelCardHTML(n)).join('');
+            document.getElementById('allNovelsGrid').innerHTML = novels.map(n => novelCardHTML(n)).join('');
+            
+            document.getElementById('homeEpisodesGrid').innerHTML = episodes.slice(0, 3).map(ep => episodeCardHTML(ep)).join('');
+            document.getElementById('allEpisodesGrid').innerHTML = episodes.map(ep => episodeCardHTML(ep)).join('');
+            
+            document.getElementById('teamGridAbout').innerHTML = team.map(m => `
+                <div class="team-member">
+                    <div class="avatar"><i class="fas ${m.icon || 'fa-user'}"></i></div>
+                    <div class="m-name">${m.name}</div>
+                    <div class="m-role">${m.role}</div>
+                </div>
+            `).join('');
 
-            if (homeNovelsEl) homeNovelsEl.innerHTML = novels.slice(0, 6).map(n => novelCardHTML(n)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-book"></i><p>لا توجد روايات بعد</p></div>';
-            if (homeEpisodesEl) homeEpisodesEl.innerHTML = episodes.slice(0, 6).map(ep => episodeCardHTML(ep)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-film"></i><p>لا توجد حلقات بعد</p></div>';
-            if (allNovelsEl) allNovelsEl.innerHTML = novels.map(n => novelCardHTML(n)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-book"></i><p>لا توجد روايات بعد</p></div>';
-            if (allEpisodesEl) allEpisodesEl.innerHTML = episodes.map(ep => episodeCardHTML(ep)).join('') || '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-film"></i><p>لا توجد حلقات بعد</p></div>';
-
-            const annEl = document.getElementById('announcementsList');
-            if (annEl) {
-                annEl.innerHTML = announcements.map(a => `
-                    <div class="announcement-card">
-                        <div class="ann-head">
-                            <span class="ann-badge">${a.badge}</span>
-                            <span class="ann-date"><i class="fas fa-calendar"></i> ${a.date}</span>
-                        </div>
-                        <h3>${a.title}</h3>
-                        <p>${a.body}</p>
-                    </div>
-                `).join('') || '<div class="empty-state"><i class="fas fa-bullhorn"></i><p>لا توجد إعلانات</p></div>';
-            }
-
-            const teamEl = document.getElementById('teamGridAbout');
-            if (teamEl) {
-                teamEl.innerHTML = team.map(m => `
-                    <div class="team-member">
-                        <div class="avatar"><i class="fas ${m.icon || 'fa-user'}"></i></div>
-                        <div class="m-name">${m.name}</div>
-                        <div class="m-role">${m.role}</div>
-                    </div>
-                `).join('');
-            }
-
-            const contactEl = document.getElementById('contactGrid');
-            if (contactEl) {
-                contactEl.innerHTML = `
-                    <a class="contact-item" href="tel:${contact.phone}">
-                        <div class="c-icon"><i class="fas fa-phone"></i></div>
-                        <div class="c-info">
-                            <div class="c-label">الهاتف</div>
-                            <div class="c-value ltr">${contact.phone}</div>
-                        </div>
-                    </a>
-                    <a class="contact-item" href="https://wa.me/${(contact.whatsapp||'').replace(/[^0-9]/g, '')}" target="_blank">
-                        <div class="c-icon"><i class="fab fa-whatsapp"></i></div>
-                        <div class="c-info">
-                            <div class="c-label">واتساب</div>
-                            <div class="c-value ltr">${contact.whatsapp}</div>
-                        </div>
-                    </a>
-                    <a class="contact-item" href="mailto:${contact.email}">
-                        <div class="c-icon"><i class="fas fa-envelope"></i></div>
-                        <div class="c-info">
-                            <div class="c-label">البريد الإلكتروني</div>
-                            <div class="c-value ltr">${contact.email}</div>
-                        </div>
-                    </a>
-                    <div class="contact-item">
-                        <div class="c-icon"><i class="fas fa-code"></i></div>
-                        <div class="c-info">
-                            <div class="c-label">البرمجة والتطوير</div>
-                            <div class="c-value">${contact.dev}</div>
-                        </div>
-                    </div>
-                `;
-            }
+            document.getElementById('contactGrid').innerHTML = `
+                <a href="tel:${site.phone}" class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div class="c-label">الهاتف</div>
+                    <div class="c-value">${site.phone || 'غير متوفر'}</div>
+                </a>
+                <a href="https://wa.me/${(site.whatsapp||'').replace(/[^0-9]/g, '')}" target="_blank" class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <div class="c-label">واتساب</div>
+                    <div class="c-value">${site.whatsapp || 'غير متوفر'}</div>
+                </a>
+                <a href="mailto:${site.email}" class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div class="c-label">البريد الإلكتروني</div>
+                    <div class="c-value">${site.email || 'غير متوفر'}</div>
+                </a>
+            `;
         }
 
         /* ============================================================
-           VIDEO MODAL & SIDEBAR
+           فتح الرواية (زيادة العداد)
            ============================================================ */
-        const modal = document.getElementById('videoModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalEpisodeLabel = document.getElementById('modalEpisodeLabel');
-        const modalDescription = document.getElementById('modalDescription');
-        const videoWrapper = document.getElementById('videoWrapper');
-        const modalClose = document.getElementById('modalClose');
+        window.openNovel = async function(id) {
+            const n = novels.find(x => x.id === id);
+            if (!n) return;
 
+            // زيادة المشاهدات
+            try {
+                const docRef = doc(db, "novels", id);
+                await updateDoc(docRef, { views: increment(1) });
+            } catch (e) { console.log("Error updating views", e); }
+
+            const img = n.image ? `<img src="${n.image}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:80px;opacity:0.2;"><i class="fas fa-book"></i></div>`;
+            const words = (n.fullText || '').trim().split(/\s+/).length;
+            const readTime = Math.max(1, Math.round(words / 200));
+
+            document.getElementById('novelDetailsContent').innerHTML = `
+                <div class="novel-hero">
+                    <div class="nh-cover">${img}</div>
+                    <div class="nh-info">
+                        <span class="nh-category">${n.category || 'عام'}</span>
+                        <h1>${n.title}</h1>
+                        <p class="nh-desc">${n.description || ''}</p>
+                        <div class="nh-stats">
+                            <div class="stat"><span class="num">${n.views || 0}</span><span class="lbl">مشاهدة</span></div>
+                            <div class="stat"><span class="num">${words}</span><span class="lbl">كلمة</span></div>
+                            <div class="stat"><span class="num">${readTime}</span><span class="lbl">دقيقة</span></div>
+                        </div>
+                        <a class="btn-primary" onclick="openReader('${n.id}')">
+                            <i class="fas fa-book-open"></i> ابدأ القراءة
+                        </a>
+                    </div>
+                </div>
+            `;
+            navigate('novel-details');
+        }
+
+        /* ============================================================
+           القارئ (حفظ التقدم)
+           ============================================================ */
+        window.openReader = function(id) {
+            const n = novels.find(x => x.id === id);
+            if (!n) return;
+            currentReader = { novelId: id };
+
+            const paragraphs = (n.fullText || '').split(/\n\s*\n/).filter(p => p.trim()).map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+            
+            document.getElementById('readerContent').innerHTML = `
+                <div class="reader-topbar">
+                    <button class="reader-back" onclick="openNovel('${n.id}')"><i class="fas fa-arrow-right"></i> عودة</button>
+                </div>
+                <div class="reader-header">
+                    <div class="r-category" style="color:var(--gold);font-weight:800;margin-bottom:10px;">${n.category || 'عام'}</div>
+                    <h1>${n.title}</h1>
+                </div>
+                <div class="reader-content" id="actualText">${paragraphs}</div>
+            `;
+            navigate('reader');
+
+            // استعادة التقدم
+            const savedScroll = localStorage.getItem(`progress_${n.id}`);
+            if (savedScroll) {
+                setTimeout(() => {
+                    window.scrollTo({ top: parseInt(savedScroll), behavior: 'smooth' });
+                }, 150);
+            }
+        }
+
+        // شريط التقدم وحفظ موضع القراءة
+        window.addEventListener('scroll', () => {
+            const readerPage = document.getElementById('page-reader');
+            if (readerPage.classList.contains('active') && currentReader.novelId) {
+                localStorage.setItem(`progress_${currentReader.novelId}`, window.scrollY);
+                
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                const progressBar = document.getElementById('progressBar');
+                if(progressBar) progressBar.style.width = scrolled + "%";
+            }
+        });
+
+        /* ============================================================
+           فيديو
+           ============================================================ */
         window.openVideo = function(id) {
             const ep = episodes.find(e => e.id === id);
             if (!ep) return;
-            modalTitle.textContent = ep.title;
-            modalEpisodeLabel.querySelector('span').textContent = `الحلقة ${ep.episodeNum} • ${ep.novel}`;
-            modalDescription.querySelector('p').textContent = ep.description;
-
-            let videoHTML = '';
-            if (ep.source === 'streamable' && ep.streamableId) {
-                videoHTML = `<iframe src="https://streamable.com/e/${ep.streamableId}?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe>`;
-            } else if (ep.source === 'youtube' && ep.youtubeId) {
-                videoHTML = `<iframe src="https://www.youtube.com/embed/${ep.youtubeId}?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe>`;
-            }
-            videoWrapper.innerHTML = videoHTML;
-            modal.classList.add('active');
+            let html = '';
+            if (ep.source === 'streamable') html = `<iframe src="https://streamable.com/e/${ep.streamableId}?autoplay=1" allowfullscreen></iframe>`;
+            else if (ep.source === 'youtube') html = `<iframe src="https://www.youtube.com/embed/${ep.youtubeId}?autoplay=1" allowfullscreen></iframe>`;
+            
+            document.getElementById('videoWrapper').innerHTML = html;
+            document.getElementById('videoModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        function closeVideo() {
-            modal.classList.remove('active');
+        window.closeVideo = function() {
+            document.getElementById('videoModal').classList.remove('active');
             document.body.style.overflow = '';
-            setTimeout(() => { videoWrapper.innerHTML = ''; }, 300);
-        }
-
-        modalClose.addEventListener('click', closeVideo);
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) closeVideo();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('active')) closeVideo();
-        });
-
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarClose = document.getElementById('sidebarClose');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        function openSidebar() {
-            sidebar.classList.add('active');
-            sidebarOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeSidebar() {
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        menuBtn.addEventListener('click', openSidebar);
-        sidebarClose.addEventListener('click', closeSidebar);
-        sidebarOverlay.addEventListener('click', closeSidebar);
-
-        document.querySelectorAll('.sidebar-nav a').forEach(a => {
-            a.addEventListener('click', function() {
-                navigate(this.dataset.nav);
-            });
-        });
-
-        window.handleContactSubmit = function(e) {
-            e.preventDefault();
-            const name = document.getElementById('cName').value.trim();
-            const email = document.getElementById('cEmail').value.trim();
-            const message = document.getElementById('cMessage').value.trim();
-            if (!name || !email || !message) return;
-            const form = e.target;
-            const originalHTML = form.innerHTML;
-            form.innerHTML = `
-                <div style="text-align:center;padding:30px 10px;">
-                    <i class="fas fa-check-circle" style="font-size:56px;color:var(--gold);margin-bottom:16px;"></i>
-                    <h3 style="color:var(--text);margin-bottom:10px;">تم إرسال رسالتك بنجاح!</h3>
-                    <p style="color:var(--text-secondary);font-size:14px;">شكراً ${name}، سنتواصل معك قريباً على ${email}.</p>
-                </div>
-            `;
-            setTimeout(() => { form.innerHTML = originalHTML; }, 5000);
+            document.getElementById('videoWrapper').innerHTML = '';
         }
 
         /* ============================================================
-           INIT
+           التحكم في القائمة
            ============================================================ */
-        // تشغيل جلب البيانات بمجرد تحميل الصفحة
-        fetchDataFromFirebase();
+        const sidebar = document.getElementById('sidebar');
+        document.getElementById('menuBtn').onclick = () => { sidebar.classList.add('active'); document.getElementById('sidebarOverlay').classList.add('active'); };
+        document.getElementById('sidebarClose').onclick = closeSidebar;
+        document.getElementById('sidebarOverlay').onclick = closeSidebar;
+        function closeSidebar() { sidebar.classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+        document.querySelectorAll('.sidebar-nav a').forEach(a => a.onclick = function() { navigate(this.dataset.nav); });
+
+        // تشغيل جلب البيانات
+        loadAllData();
     </script>
 </body>
 </html>
